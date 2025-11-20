@@ -1,13 +1,13 @@
 import ChatBubble from "./ChatBubble";
 
-export default function ChatContainer({ history }) {
+export default function ChatContainer({ messages }) {
+  if (!Array.isArray(messages)) return null;
+
   return (
     <div className="chat-container">
-      <div className="chat-body">
-        {history.map((msg, i) => (
-          <ChatBubble key={i} role={msg.role} text={msg.text} />
-        ))}
-      </div>
+      {messages.map((msg, i) => (
+        <ChatBubble key={i} {...msg} />
+      ))}
     </div>
   );
 }

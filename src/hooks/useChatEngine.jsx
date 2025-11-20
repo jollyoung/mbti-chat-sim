@@ -3,62 +3,55 @@ import { story } from "../story/storyEngine";
 
 export default function useChatEngine() {
   const [messages, setMessages] = useState([]);
-  const [step, setStep] = useState(0);
+  const [scene, setScene] = useState("intro");
+  const [index, setIndex] = useState(0);
+
   const [choiceVisible, setChoiceVisible] = useState(false);
   const [currentChoices, setCurrentChoices] = useState([]);
 
-  // ✅ 메시지 추가 헬퍼
-  const pushMessage = (sender, text) => {
-    setMessages(prev => [...prev, { sender, text }]);
+  // 메시지 추가
+  const pushMessage = (msg) => {
+    setMessages(prev => [...prev, msg]);
   };
 
-  // ✅ NPC 메시지를 1초 간격으로 출력하는 함수
-  const pushNPCMessagesSequentially = async (npcLines) => {
-    for (let i = 0; i < npcLines.length; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 1초 지연
-      pushMessage("npc", npcLines[i]);
+  // NPC 메시지 출력
+  const playNext = async () => {
+    const block = story[scene][index];
+    if (!block) return;
+
+    // 선택지가 나오면 멈추고 선택창 표시
+    if (block.type === "choice") {
+      setCurrentChoices(block.options);
+      setChoiceVisible(true);
+      return;
     }
+
+    // 일반 메시지 출력
+    pushMessage({ role: block.role, text: block.text });
+
+    // 다음 메시지까지 1초 대기
+    await new Promise(res => setTimeout(res, 1000));
+
+    setIndex(prev => prev + 1);
   };
 
-  // 첫 시작
+  // 처음 시작
   useEffect(() => {
-    const firstNPC = story[0].npc;
-    
-    // npc가 배열이면 → 순차 출력
-    if (Array.isArray(firstNPC)) {
-      pushNPCMessagesSequentially(firstNPC);
-    } else {
-      pushMessage("npc", firstNPC);
-    }
+    playNext();
+  }, [index, scene]);
 
-    setCurrentChoices(story[0].choices);
-    setChoiceVisible(true);
-  }, []);
-
-  // 유저 선택 처리
-  const handleChoice = (choiceText) => {
-    pushMessage("user", choiceText);
+  // 선택 처리
+  const handleChoice = (opt) => {
+    // 유저 메시지 추가
+    pushMessage({ role: "user", text: opt.label });
     setChoiceVisible(false);
 
-    const next = story[step + 1];
-    if (!next) return;
+    // 다음 scene으로 이동
+    setScene(opt.next);
+    setIndex(0);
 
-    setStep(prev => prev + 1);
-
-    // NPC 대사 출력
-    if (Array.isArray(next.npc)) {
-      pushNPCMessagesSequentially(next.npc);
-    } else {
-      pushMessage("npc", next.npc);
-    }
-
-    // 다음 선택지가 있다면 제시
-    if (next.choices) {
-      setTimeout(() => {
-        setCurrentChoices(next.choices);
-        setChoiceVisible(true);
-      }, 1000 * (Array.isArray(next.npc) ? next.npc.length : 1));
-    }
+    // 약간 쉬고 다음 장면 시작
+    setTimeout(() => playNext(), 500);
   };
 
   return {
