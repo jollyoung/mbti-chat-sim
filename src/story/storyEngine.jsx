@@ -1,10 +1,7 @@
-// src/story/storyEngine.jsx
-
-export const story = {
+const baseScenario = {
   intro: [
     { role: "npc", text: "안녕하세요! 소개받아서 연락드렸어요 😊" },
     { role: "npc", text: "혹시 지금 잠깐 이야기 괜찮나요?" },
-
     {
       type: "choice",
       question: "어떻게 대답할까요?",
@@ -18,7 +15,6 @@ export const story = {
   friendly: [
     { role: "npc", text: "오! 다행이에요 😄" },
     { role: "npc", text: "그럼 간단하게 자기소개 먼저 할까요?" },
-
     {
       type: "choice",
       question: "어떻게 답할까요?",
@@ -35,7 +31,6 @@ export const story = {
 
   cold: [
     { role: "npc", text: "괜찮아요! 편하실 때 이야기해요 😊" },
-
     {
       type: "choice",
       question: "그럼 언제가 좋을까요?",
@@ -49,4 +44,23 @@ export const story = {
   cold_next: [
     { role: "npc", text: "넵! 그때 다시 이야기해요 :)" }
   ]
+};
+
+export const storyTable = {
+  INFP: baseScenario,
+  INFJ: baseScenario,
+  INTJ: baseScenario,
+  INTP: baseScenario,
+  ISFP: baseScenario,
+  ISFJ: baseScenario,
+  ISTP: baseScenario,
+  ISTJ: baseScenario,
+  ENFP: baseScenario,
+  ENFJ: baseScenario,
+  ENTP: baseScenario,
+  ENTJ: baseScenario,
+  ESFP: baseScenario,
+  ESFJ: baseScenario,
+  ESTP: baseScenario,
+  ESTJ: baseScenario
 };
