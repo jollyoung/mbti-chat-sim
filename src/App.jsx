@@ -61,7 +61,7 @@ function App() {
   // 두 번째 화면: 메신저 시뮬레이션
   return (
     <>
-      <ChatContainer history={history} />
+      <ChatContainer messages={history} />
 
       {pendingChoice && (
         <ChoiceModal

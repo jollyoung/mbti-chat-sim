@@ -1,4 +1,5 @@
 export default function ChoiceModal({ question, options, onSelect }) {
+  if (!options || !Array.isArray(options)) return null; // ← JSX 위로 이동
 
   return (
     <div className="modal-backdrop">
