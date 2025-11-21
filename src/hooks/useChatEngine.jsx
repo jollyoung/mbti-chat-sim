@@ -11,53 +11,56 @@ export default function useChatEngine() {
 
   // 메시지 추가
   const pushMessage = (msg) => {
-    setMessages(prev => [...prev, msg]);
+    setMessages((prev) => [...prev, msg]);
   };
 
-  // NPC 메시지 출력
+  // 다음 메시지 처리 (choice면 멈춤)
   const playNext = async () => {
-    const block = story[scene][index];
+    const block = story[scene]?.[index];
+
     if (!block) return;
 
-    // 선택지가 나오면 멈추고 선택창 표시
+    // 블록이 선택지라면 → choice UI 보여주고 index 증가하지 않음
     if (block.type === "choice") {
       setCurrentChoices(block.options);
       setChoiceVisible(true);
       return;
     }
 
-    // 일반 메시지 출력
+    // 일반 NPC 메시지 출력
     pushMessage({ role: block.role, text: block.text });
 
-    // 다음 메시지까지 1초 대기
-    await new Promise(res => setTimeout(res, 1000));
+    // 1초 텀
+    await new Promise((res) => setTimeout(res, 1000));
 
-    setIndex(prev => prev + 1);
+    // 다음 메시지로
+    setIndex((prev) => prev + 1);
   };
 
-  // 처음 시작
+  // index 또는 scene이 바뀔 때 playNext 실행
   useEffect(() => {
     playNext();
   }, [index, scene]);
 
-  // 선택 처리
+  // 유저가 선택했을 때
   const handleChoice = (opt) => {
-    // 유저 메시지 추가
     pushMessage({ role: "user", text: opt.label });
     setChoiceVisible(false);
 
     // 다음 scene으로 이동
     setScene(opt.next);
-    setIndex(0);
+    setIndex(0); // scene 새로 시작
 
-    // 약간 쉬고 다음 장면 시작
-    setTimeout(() => playNext(), 500);
+    // 약간 텀을 두고 다음 메시지 시작
+    setTimeout(() => {
+      playNext();
+    }, 500);
   };
 
   return {
     messages,
     choiceVisible,
     currentChoices,
-    handleChoice
+    handleChoice,
   };
 }
