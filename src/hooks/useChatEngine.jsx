@@ -28,9 +28,6 @@ export default function useChatEngine() {
     setScene("intro");
     setIndex(0);
     setMessages([]);
-
-    await delay(300);
-    playNext(scenario, "intro", 0);
   };
 
   // ⭐ 씬/인덱스에 따라 다음 메시지 출력
