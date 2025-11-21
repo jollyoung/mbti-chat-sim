@@ -23,24 +23,43 @@ function App() {
   };
 
   // 첫 화면: 사용자 정보 입력
-  if (!userInfo) {
-    return (
-      <div className="intro-page">
-        <h1>내 MBTI를 공략해보자!</h1>
+if (!userInfo) {
+  return (
+    <div className="intro-page">
+      <h1 className="intro-title">내 MBTI를 공략해보자! 🔮</h1>
 
-        <form onSubmit={handleStart} className="info-form">
+      <form onSubmit={handleStart} className="info-form-card">
+        <div className="form-group">
           <label>성별</label>
-          <select name="sex" required>
+          <select name="sex" required className="input-box">
             <option value="">선택하세요</option>
             <option value="남성">남성</option>
             <option value="여성">여성</option>
           </select>
+        </div>
 
+        <div className="form-group">
           <label>나이</label>
-          <input type="number" name="age" min="10" max="100" required />
+          <select
+            name="age"
+            required
+            defaultValue="20"
+            className="input-box"
+          >
+            {[...Array(31)].map((_, i) => {
+              const age = i + 10; // 10~40
+              return (
+                <option key={age} value={age}>
+                  {age}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
+        <div className="form-group">
           <label>나의 MBTI</label>
-          <select name="mbti" required>
+          <select name="mbti" required className="input-box">
             <option value="">선택하세요</option>
             {[
               "INFP","INFJ","INTP","INTJ",
@@ -51,12 +70,16 @@ function App() {
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
+        </div>
 
-          <button type="submit" className="start-btn">시작하기</button>
-        </form>
-      </div>
-    );
-  }
+        <button type="submit" className="start-btn">
+          시작하기 🚀
+        </button>
+      </form>
+    </div>
+  );
+}
+
 
   // 두 번째 화면: 메신저 시뮬레이션
   return (
