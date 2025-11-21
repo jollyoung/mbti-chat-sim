@@ -47,15 +47,13 @@ export default function useChatEngine() {
     pushMessage({ role: "user", text: opt.label });
     setChoiceVisible(false);
 
-    // 다음 scene으로 이동
+    // 다음 시나리오로 이동
     setScene(opt.next);
-    setIndex(0); // scene 새로 시작
+    setIndex(0);
 
-    // 약간 텀을 두고 다음 메시지 시작
-    setTimeout(() => {
-      playNext();
-    }, 500);
+    // ❌ playNext() 호출 제거!
   };
+
 
   return {
     messages,
