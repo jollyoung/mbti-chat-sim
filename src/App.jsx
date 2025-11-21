@@ -4,52 +4,80 @@ import ChoiceModal from "./components/ChoiceModal.jsx";
 import useChatEngine from "./hooks/useChatEngine.jsx";
 import "./index.css";
 
+
 function App() {
   const [userInfo, setUserInfo] = useState(null);
+  const [selectedGender, setSelectedGender] = useState("");
+
   const { history, pendingChoice, start, choose } = useChatEngine();
 
+  // 유저 정보 입력 폼 제출
   const handleStart = (e) => {
     e.preventDefault();
+
     const sex = e.target.sex.value;
     const age = e.target.age.value;
     const mbti = e.target.mbti.value;
 
     setUserInfo({ sex, age, mbti });
+
+    // 선택한 MBTI 기반 시나리오 시작
     start(mbti);
   };
 
-  // 🔹 첫 화면
-  if (!userInfo) {
-    return (
-      <div className="intro-page">
-        <h1 className="intro-title">내 MBTI를 공략해보자!</h1>
+  // 첫 화면: 사용자 정보 입력
+if (!userInfo) {
+  return (
+    <div className="intro-page">
+
+      <div className="intro-card animate-fadeup">
+        <h1 className="intro-title">내 MBTI를 공략해보자! 🔮</h1>
 
         <form onSubmit={handleStart} className="info-form-card">
+
+          {/* ✨ 성별 버튼 UI */}
           <div className="form-group">
             <label>성별</label>
-            <select name="sex" className="input-box" required>
-              <option value="">선택하세요</option>
-              <option value="남성">남성</option>
-              <option value="여성">여성</option>
+            <div className="gender-select">
+              <input type="hidden" name="sex" value={selectedGender} required />
+
+              <button
+                type="button"
+                className={`gender-btn ${selectedGender === "남성" ? "active" : ""}`}
+                onClick={() => setSelectedGender("남성")}
+              >
+                남성
+              </button>
+
+              <button
+                type="button"
+                className={`gender-btn ${selectedGender === "여성" ? "active" : ""}`}
+                onClick={() => setSelectedGender("여성")}
+              >
+                여성
+              </button>
+            </div>
+          </div>
+
+          {/* 나이 */}
+          <div className="form-group">
+            <label>나이</label>
+            <select name="age" required defaultValue="20" className="input-box">
+              {[...Array(31)].map((_, i) => {
+                const age = i + 10;
+                return (
+                  <option key={age} value={age}>
+                    {age}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
-          <div className="form-group">
-            <label>나이</label>
-            <input
-              type="number"
-              name="age"
-              min="10"
-              max="40"
-              defaultValue="20"
-              className="input-box"
-              required
-            />
-          </div>
-
+          {/* MBTI */}
           <div className="form-group">
             <label>나의 MBTI</label>
-            <select name="mbti" className="input-box" required>
+            <select name="mbti" required className="input-box">
               <option value="">선택하세요</option>
               {[
                 "INFP","INFJ","INTP","INTJ",
@@ -62,21 +90,21 @@ function App() {
             </select>
           </div>
 
-          <button type="submit" className="start-btn">시작하기</button>
+          <button type="submit" className="start-btn animate-press">
+            시작하기 🚀
+          </button>
         </form>
       </div>
-    );
-  }
 
-  // 🔹 두 번째 화면 (메신저 UI)
+    </div>
+  );
+}
+
+
+  // 두 번째 화면: 메신저 시뮬레이션
   return (
-    <div className="chat-wrapper">
-      <div className="chat-header">
-        <img src="/profile_npc.png" className="chat-header-img" />
-        <span className="chat-header-name">상대방</span>
-      </div>
-
-      <ChatContainer history={history} />
+    <>
+      <ChatContainer messages={history} />
 
       {pendingChoice && (
         <ChoiceModal
@@ -85,7 +113,7 @@ function App() {
           onSelect={choose}
         />
       )}
-    </div>
+    </>
   );
 }
 
