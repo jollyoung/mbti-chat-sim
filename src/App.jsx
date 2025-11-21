@@ -1,25 +1,27 @@
-import { useEffect } from "react";
 import ChatContainer from "./components/ChatContainer.jsx";
 import ChoiceModal from "./components/ChoiceModal.jsx";
 import useChatEngine from "./hooks/useChatEngine.jsx";
 import "./index.css";
 
 function App() {
-  const { history, pendingChoice, start, choose } = useChatEngine();
-
-  useEffect(() => {
-    start();
-  }, []);
+  const {
+    messages,
+    choiceVisible,
+    currentChoices,
+    handleChoice
+  } = useChatEngine();
 
   return (
     <>
-      <ChatContainer history={history} />
+      {/* 채팅 메시지 표시 */}
+      <ChatContainer messages={messages} />
 
-      {pendingChoice && (
+      {/* 선택지 모달 */}
+      {choiceVisible && (
         <ChoiceModal
-          question={pendingChoice.question}
-          options={pendingChoice.options}
-          onSelect={choose}
+          question="선택해주세요"
+          options={currentChoices}
+          onSelect={handleChoice}
         />
       )}
     </>
