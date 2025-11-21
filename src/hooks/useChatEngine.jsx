@@ -22,8 +22,10 @@ export default function useChatEngine() {
 
     // 블록이 선택지라면 → choice UI 보여주고 index 증가하지 않음
     if (block.type === "choice") {
-      setCurrentChoices(block.options);
-      setChoiceVisible(true);
+      setTimeout(() => {
+        setCurrentChoices(block.options);
+        setChoiceVisible(true);
+      }, 1000); // 1초 딜레이
       return;
     }
 
