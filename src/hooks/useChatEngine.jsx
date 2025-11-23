@@ -52,9 +52,15 @@ export default function useChatEngine() {
 
   // index/scene 변경 시 자동 호출
   useEffect(() => {
-    if (!currentStory || !scene) return;
-    playNext(currentStory, scene, index);
-  }, [index, scene]);
+    if (!currentStory || scene === null) return;
+    const storyObj = currentStory;
+
+    // 현재 scene에 해당하는 배열이 없으면 종료
+    if (!storyObj[scene]) return;
+
+    playNext(storyObj, scene, index);
+  }, [currentStory, scene, index]);
+
 
   // ⭐ 유저 선택 처리
   const choose = async (option) => {
