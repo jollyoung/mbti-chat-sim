@@ -132,3 +132,62 @@
   }
 }
 
+/* ------------------------------ */
+/* 🔥 메신저 전체 레이아웃 */
+/* ------------------------------ */
+
+.chat-wrapper {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  background: #ffffff;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/* 🔥 상단 헤더 */
+.chat-header {
+  height: 70px;
+  background: #f7f7ff;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 12px;
+}
+
+.npc-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eee;
+}
+
+.npc-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.npc-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.npc-status {
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+/* 🔥 채팅 내용 */
+.chat-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #f2f3f7;
+}
