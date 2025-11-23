@@ -187,7 +187,96 @@
 /* 🔥 채팅 내용 */
 .chat-body {
   flex: 1;
-  padding: 16px;
+  padding: 20px 14px;
   overflow-y: auto;
   background: #f2f3f7;
+}
+
+
+
+/* ============================
+   🔥 카카오톡 말풍선 스타일
+============================ */
+
+/* 메시지 하나의 행 */
+.chat-row {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.chat-row.left {
+  justify-content: flex-start;
+}
+
+.chat-row.right {
+  justify-content: flex-end;
+}
+
+/* NPC 프로필 이미지 */
+.bubble-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* 말풍선 박스 */
+.bubble-box {
+  max-width: 65%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 15px;
+  line-height: 1.4;
+  position: relative;
+  animation: chatFade 0.25s ease-out;
+}
+
+/* NPC 말풍선 색상(회색) */
+.npc-bubble {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  color: #333;
+}
+
+/* USER 말풍선 색상(초록/카톡 기본색) */
+.user-bubble {
+  background: #aee571;
+  color: black;
+  margin-right: 6px;
+}
+
+/* 말풍선 꼬리 */
+.bubble-tail {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+}
+
+.npc-bubble .bubble-tail {
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #ffffff transparent transparent;
+  left: -9px;
+  top: 8px;
+}
+
+.user-bubble .bubble-tail {
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #aee571;
+  right: -9px;
+  top: 8px;
+}
+
+/* 등장 애니메이션 */
+@keyframes chatFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
