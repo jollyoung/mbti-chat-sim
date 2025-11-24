@@ -7,28 +7,38 @@ import "./index.css";
 
 /* MBTI별 프로필 매핑 */
 const MBTI_PROFILE_MAP = {
-  INFP: "/profile_INFP.png",
-  INFJ: "/mood_profile.png",
-  INTP: "/profile_INTP.png",
+  // 기본 프로필 그룹
+  ISTJ: "/basic_profile.jpg",
   INTJ: "/basic_profile.jpg",
+  ISTP: "/basic_profile.jpg",
 
-  ENFP: "/profile_ENFP.png",
-  ENFJ: "/profile_ENFJ.png",
-  ENTP: "/profile_ENTP.png",
+  // 반려동물 그룹
+  INFP: "/pet_profile.png",
+  ISFJ: "/pet_profile.png",
+
+  // 감성 사진 그룹
+  INFJ: "/mood_profile.png",
+  ISFP: "/mood_profile.png",
+
+  // 밈(meme) 그룹
+  INTP: "/meme_profile.png",
+  ENTP: "/meme_profile.png",
+
+  // 포멀(정장) 그룹
+  ESTJ: "/formal_profile.png",
   ENTJ: "/formal_profile.png",
 
-  ISFP: "/mood_profile.png",
-  ISFJ: "/profile_ISFJ.png",
-  ISTP: "/basic_profile.jpg",
-  ISTJ: "/basic_profile.jpg",
+  // 화려한 셀카 그룹
+  ENFJ: "/selfie_profile.png",
+  ENFP: "/selfie_profile.png",
+  ESFJ: "/selfie_profile.png",
 
-  ESFP: "/profile_ESFP.png",
-  ESFJ: "/profile_ESFJ.png",
-  ESTP: "/profile_ESTP.png",
-  ESTJ: "/formal_profile.png",
+  // 여행 그룹
+  ESTP: "/travel_profile.png",
+  ESFP: "/travel_profile.png",
 };
 
-const DEFAULT_NPC_PROFILE = "/profile_default.png";
+const DEFAULT_NPC_PROFILE = "/profile_npc.png";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -54,23 +64,24 @@ function App() {
       return;
     }
 
-    // MBTI별 NPC 프로필 이미지 결정
-    let npcProfile = "/profile_npc.png"; // 기본값
+    // 🔥 MBTI별 NPC 프로필 자동 결정
+    let npcProfile = DEFAULT_NPC_PROFILE;
 
-    if (mbti === "INTJ" || mbti === "ISTJ") {
-      npcProfile = "/basic_profile.jpg";  // 업로드한 이미지 사용
+    if (MBTI_PROFILE_MAP[mbti]) {
+      npcProfile = MBTI_PROFILE_MAP[mbti];
     }
 
-      setUserInfo({ sex, age, mbti, npcProfile });
-      start(mbti);
-    };
+    setUserInfo({ sex, age, mbti, npcProfile });
+    start(mbti);
+  };
 
   return (
     <>
       {!userInfo ? (
         <div className="intro-page animate-fadeup">
           <form onSubmit={handleStart} className="intro-card">
-            {/* 성별 버튼들 */}
+
+            {/* 성별 */}
             <div className="form-group">
               <label>성별</label>
               <input type="hidden" name="sex" value={selectedGender} />
@@ -82,6 +93,7 @@ function App() {
                 >
                   남성
                 </button>
+
                 <button
                   type="button"
                   className={`gender-btn ${selectedGender === "female" ? "active" : ""}`}
@@ -100,7 +112,7 @@ function App() {
               </select>
             </div>
 
-            {/* MBTI */}
+            {/* MBTI 선택 */}
             <div className="form-group">
               <label>나의 MBTI</label>
               <select name="mbti" className="input-box" required>
@@ -127,7 +139,7 @@ function App() {
             <button className="start-btn">시작하기 🚀</button>
           </form>
 
-          {/* 🔥 오류 메시지 팝업 */}
+          {/* 오류 팝업 */}
           {errorMessage && (
             <ErrorPopup
               message={errorMessage}
@@ -137,7 +149,11 @@ function App() {
         </div>
       ) : (
         <>
-          <ChatContainer messages={history} npcProfile={userInfo.npcProfile} />
+          <ChatContainer
+            messages={history}
+            npcProfile={userInfo.npcProfile}
+          />
+
           {pendingChoice && (
             <ChoiceModal
               question={pendingChoice.question}
