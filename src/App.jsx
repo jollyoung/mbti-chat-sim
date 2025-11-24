@@ -44,6 +44,7 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [selectedGender, setSelectedGender] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [age, setAge] = useState(20);
 
   const { history, pendingChoice, start, choose } = useChatEngine();
 
@@ -51,8 +52,6 @@ function App() {
     e.preventDefault();
 
     const sex = e.target.sex.value;
-    const [age, setAge] = useState(20);
-
     const mbti = e.target.mbti.value;
 
     if (!sex) {
