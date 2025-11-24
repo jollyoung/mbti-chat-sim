@@ -117,8 +117,8 @@ function App() {
                 max={50}
                 onChange={(e) => {
                   let val = Number(e.target.value);
-                  if (val > 50) val = 50;
-                  if (val < 10) val = 10;
+                  if (val > 100) val = 100;
+                  if (val < 0) val = 0;
                   setAge(val);
                 }}
                 className="input-box"
