@@ -44,7 +44,7 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [selectedGender, setSelectedGender] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [age, setAge] = useState(20);
+  const [age, setAge] = useState("");
 
   const { history, pendingChoice, start, choose } = useChatEngine();
 
@@ -113,13 +113,18 @@ function App() {
                 type="number"
                 name="age"
                 value={age}
-                min={0}
-                max={300}
                 onChange={(e) => {
-                  let val = Number(e.target.value);
-                  if (val > 300) val = 300;
-                  if (val < 0) val = 0;
-                  setAge(val);
+                  const val = e.target.value;
+
+                  // 빈 문자열이면 그대로 허용 (백스페이스 문제 해결)
+                  if (val === "") {
+                    setAge("");
+                    return;
+                  }
+
+                  // 숫자인 경우 그대로 저장
+                  const num = Number(val);
+                  setAge(num);
                 }}
                 className="input-box"
                 placeholder="나이를 입력하세요"
