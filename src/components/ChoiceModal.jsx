@@ -1,22 +1,22 @@
 export default function ChoiceModal({ question, options, onSelect }) {
-  if (!options || !Array.isArray(options)) return null; // ← JSX 위로 이동
+  if (!options || !Array.isArray(options)) return null;
 
   return (
-    <div className="modal-backdrop">
-      <div className="choice-modal">
+    <div className="choice-overlay">
+      <div className="choice-popup animate-popup">
+        <h3 className="choice-title">{question}</h3>
 
-        <h4>{question}</h4>
-
-        {options.map((opt, i) => (
-          <div
-            key={i}
-            className="choice-btn"
-            onClick={() => onSelect(opt)}
-          >
-            {opt.label}
-          </div>
-        ))}
-
+        <div className="choice-list">
+          {options.map((opt, i) => (
+            <div
+              key={i}
+              className="choice-item"
+              onClick={() => onSelect(opt)}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
