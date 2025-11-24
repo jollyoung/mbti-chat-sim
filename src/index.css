@@ -374,3 +374,48 @@
 .animate-popup {
   animation: popupScale 0.25s ease-out;
 }
+
+
+/* ============================
+   🔥 예쁜 오류 메시지 팝업
+============================ */
+.error-overlay {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.error-box {
+  background: #fff4f4;
+  border: 1px solid #ffc6c6;
+  color: #d93737;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.error-icon {
+  font-size: 18px;
+}
+
+@keyframes errorFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
+}
+
+.animate-error {
+  animation: errorFade 0.28s ease-out;
+}
