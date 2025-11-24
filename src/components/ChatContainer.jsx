@@ -9,7 +9,7 @@ export default function ChatContainer({ messages, npcProfile }) {
       {/* 🔥 프로필 + 상단 헤더 */}
       <div className="chat-header">
         <img
-          src="/profile_npc.png"
+          src= {npcProfile}
           className="npc-avatar"
           alt="NPC Profile"
         />
