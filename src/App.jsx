@@ -4,6 +4,7 @@ import ChoiceModal from "./components/ChoiceModal.jsx";
 import useChatEngine from "./hooks/useChatEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
 import "./index.css";
+import basicProfile from "/basic_profile.jpg";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -33,7 +34,7 @@ function App() {
     let npcProfile = "/profile_npc.png"; // 기본값
 
     if (mbti === "INTJ" || mbti === "ISTJ") {
-      npcProfile = "/basic_profile.jpg";   // 업로드한 이미지 사용
+      npcProfile = basicProfile;   // 업로드한 이미지 사용
     }
 
       setUserInfo({ sex, age, mbti });
