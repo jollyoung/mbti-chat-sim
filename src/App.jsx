@@ -73,9 +73,22 @@ function App() {
               <label>나의 MBTI</label>
               <select name="mbti" className="input-box" required>
                 <option value="">선택하세요</option>
+                <option value="INFP">INFP</option>
+                <option value="INFJ">INFJ</option>
+                <option value="INTP">INTP</option>
                 <option value="INTJ">INTJ</option>
+                <option value="ISFP">ISFP</option>
+                <option value="ISFJ">ISFJ</option>
+                <option value="ISTP">ISTP</option>
+                <option value="ISTJ">ISTJ</option>
                 <option value="ENFP">ENFP</option>
-                {/* ... */}
+                <option value="ENFJ">ENFJ</option>
+                <option value="ENTP">ENTP</option>
+                <option value="ENTJ">ENTJ</option>
+                <option value="ESFP">ESFP</option>
+                <option value="ESFJ">ESFJ</option>
+                <option value="ESTP">ESTP</option>
+                <option value="ESTJ">ESTJ</option>
               </select>
             </div>
 
