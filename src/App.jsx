@@ -8,7 +8,7 @@ import "./index.css";
 /* MBTI별 프로필 매핑 */
 const MBTI_PROFILE_MAP = {
   INFP: "/profile_INFP.png",
-  INFJ: "/profile_INFJ.png",
+  INFJ: "/mood_profile.png",
   INTP: "/profile_INTP.png",
   INTJ: "/basic_profile.jpg",
 
@@ -17,7 +17,7 @@ const MBTI_PROFILE_MAP = {
   ENTP: "/profile_ENTP.png",
   ENTJ: "/formal_profile.png",
 
-  ISFP: "/profile_ISFP.png",
+  ISFP: "/mood_profile.png",
   ISFJ: "/profile_ISFJ.png",
   ISTP: "/basic_profile.jpg",
   ISTJ: "/basic_profile.jpg",
