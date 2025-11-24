@@ -109,10 +109,34 @@ function App() {
             {/* 나이 */}
             <div className="form-group">
               <label>나이</label>
-              <select name="age" className="input-box">
-                <option value="20">20</option>
-              </select>
+
+              <div className="age-selector">
+                <button
+                  type="button"
+                  className="age-btn"
+                  onClick={() => setAge((prev) => Math.max(10, prev - 1))}
+                >
+                  -
+                </button>
+
+                <input
+                  type="number"
+                  name="age"
+                  value={age}
+                  readOnly
+                  className="age-display"
+                />
+
+                <button
+                  type="button"
+                  className="age-btn"
+                  onClick={() => setAge((prev) => Math.min(50, prev + 1))}
+                >
+                  +
+                </button>
+              </div>
             </div>
+
 
             {/* MBTI 선택 */}
             <div className="form-group">
