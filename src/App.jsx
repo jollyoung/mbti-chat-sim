@@ -51,7 +51,8 @@ function App() {
     e.preventDefault();
 
     const sex = e.target.sex.value;
-    const age = e.target.age.value;
+    const [age, setAge] = useState(20);
+
     const mbti = e.target.mbti.value;
 
     if (!sex) {
