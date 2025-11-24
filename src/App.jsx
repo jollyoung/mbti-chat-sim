@@ -10,22 +10,22 @@ const MBTI_PROFILE_MAP = {
   INFP: "/profile_INFP.png",
   INFJ: "/profile_INFJ.png",
   INTP: "/profile_INTP.png",
-  INTJ: "/profile_INTJ.png",
+  INTJ: "/basic_profile.jpg",
 
   ENFP: "/profile_ENFP.png",
   ENFJ: "/profile_ENFJ.png",
   ENTP: "/profile_ENTP.png",
-  ENTJ: "/profile_ENTJ.png",
+  ENTJ: "/formal_profile.png",
 
   ISFP: "/profile_ISFP.png",
   ISFJ: "/profile_ISFJ.png",
-  ISTP: "/profile_ISTP.png",
-  ISTJ: "/basic_profile.png",
+  ISTP: "/basic_profile.jpg",
+  ISTJ: "/basic_profile.jpg",
 
   ESFP: "/profile_ESFP.png",
   ESFJ: "/profile_ESFJ.png",
   ESTP: "/profile_ESTP.png",
-  ESTJ: "/profile_ESTJ.png",
+  ESTJ: "/formal_profile.png",
 };
 
 const DEFAULT_NPC_PROFILE = "/profile_default.png";
