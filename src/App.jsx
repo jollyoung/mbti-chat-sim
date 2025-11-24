@@ -64,6 +64,11 @@ function App() {
       return;
     }
 
+    if (age === "") {
+      setErrorMessage("나이를 입력해주세요!");
+      return;
+    }
+
     // 🔥 MBTI별 NPC 프로필 자동 결정
     let npcProfile = DEFAULT_NPC_PROFILE;
 
