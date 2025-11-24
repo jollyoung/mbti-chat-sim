@@ -4,10 +4,7 @@ export default function ChatBubble({ role, text, npcProfile }) {
   return (
     <div className={`chat-row ${isNPC ? "left" : "right"}`}>
       {isNPC && (
-        <img
-          src={npcProfile}
-          className="bubble-avatar"
-        />
+        <img src={npcProfile} className="bubble-avatar" />
       )}
 
       <div className={`bubble-box ${isNPC ? "npc-bubble" : "user-bubble"}`}>

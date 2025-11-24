@@ -5,6 +5,31 @@ import useChatEngine from "./hooks/useChatEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
 import "./index.css";
 
+/* MBTI별 프로필 매핑 */
+const MBTI_PROFILE_MAP = {
+  INFP: "/profile_INFP.png",
+  INFJ: "/profile_INFJ.png",
+  INTP: "/profile_INTP.png",
+  INTJ: "/profile_INTJ.png",
+
+  ENFP: "/profile_ENFP.png",
+  ENFJ: "/profile_ENFJ.png",
+  ENTP: "/profile_ENTP.png",
+  ENTJ: "/profile_ENTJ.png",
+
+  ISFP: "/profile_ISFP.png",
+  ISFJ: "/profile_ISFJ.png",
+  ISTP: "/profile_ISTP.png",
+  ISTJ: "/basic_profile.png",
+
+  ESFP: "/profile_ESFP.png",
+  ESFJ: "/profile_ESFJ.png",
+  ESTP: "/profile_ESTP.png",
+  ESTJ: "/profile_ESTJ.png",
+};
+
+const DEFAULT_NPC_PROFILE = "/profile_default.png";
+
 function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [selectedGender, setSelectedGender] = useState("");
