@@ -113,8 +113,8 @@ function App() {
                 type="number"
                 name="age"
                 value={age}
-                min={10}
-                max={50}
+                min={0}
+                max={300}
                 onChange={(e) => {
                   let val = Number(e.target.value);
                   if (val > 300) val = 300;
