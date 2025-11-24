@@ -37,7 +37,7 @@ function App() {
       npcProfile = basicProfile;   // 업로드한 이미지 사용
     }
 
-      setUserInfo({ sex, age, mbti });
+      setUserInfo({ sex, age, mbti, npcProfile });
       start(mbti);
     };
 
