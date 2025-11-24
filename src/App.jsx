@@ -109,33 +109,23 @@ function App() {
             {/* 나이 */}
             <div className="form-group">
               <label>나이</label>
-
-              <div className="age-selector">
-                <button
-                  type="button"
-                  className="age-btn"
-                  onClick={() => setAge((prev) => Math.max(10, prev - 1))}
-                >
-                  -
-                </button>
-
-                <input
-                  type="number"
-                  name="age"
-                  value={age}
-                  readOnly
-                  className="age-display"
-                />
-
-                <button
-                  type="button"
-                  className="age-btn"
-                  onClick={() => setAge((prev) => Math.min(50, prev + 1))}
-                >
-                  +
-                </button>
-              </div>
+              <input
+                type="number"
+                name="age"
+                value={age}
+                min={10}
+                max={50}
+                onChange={(e) => {
+                  let val = Number(e.target.value);
+                  if (val > 50) val = 50;
+                  if (val < 10) val = 10;
+                  setAge(val);
+                }}
+                className="input-box"
+                placeholder="나이를 입력하세요"
+              />
             </div>
+
 
 
             {/* MBTI 선택 */}

@@ -431,40 +431,4 @@
   animation: fadeUp 0.6s ease-out;
 }
 
-.age-selector {
-  display: flex;
-  justify-content: center;   /* 🔥 가운데 정렬 */
-  align-items: center;        /* 🔥 세로축도 정렬 */
-  gap: 12px;                  /* 버튼 사이 간격 */
-  width: 100%;                /* 전체폭 기준으로 중앙 배치 */
-  margin-top: 5px;
-}
-
-
-.age-btn {
-  width: 40px;
-  height: 40px;
-  background: #e4e8ff;
-  color: #4e5cff;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.age-btn:hover {
-  background: #d5daff;
-}
-
-.age-display {
-  width: 60px;
-  height: 40px;
-  text-align: center;
-  font-size: 18px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background: #fafafa;
-}
 
