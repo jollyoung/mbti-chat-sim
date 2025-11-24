@@ -2,7 +2,7 @@
 import ChatBubble from "./ChatBubble";
 import "../index.css";
 
-export default function ChatContainer({ messages }) {
+export default function ChatContainer({ messages, npcProfile }) {
   return (
     <div className="chat-wrapper">
 
