@@ -117,7 +117,7 @@ function App() {
                 max={50}
                 onChange={(e) => {
                   let val = Number(e.target.value);
-                  if (val > 100) val = 100;
+                  if (val > 300) val = 300;
                   if (val < 0) val = 0;
                   setAge(val);
                 }}
