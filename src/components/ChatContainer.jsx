@@ -22,7 +22,12 @@ export default function ChatContainer({ messages }) {
       {/* 🔥 채팅 본문 */}
       <div className="chat-body">
         {messages.map((msg, i) => (
-          <ChatBubble key={i} role={msg.role} text={msg.text} />
+          <ChatBubble
+            key={i}
+            role={msg.role}
+            text={msg.text}
+            npcProfile={npcProfile}
+          />
         ))}
       </div>
     </div>

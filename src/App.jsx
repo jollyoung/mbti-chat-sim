@@ -29,9 +29,16 @@ function App() {
       return;
     }
 
-    setUserInfo({ sex, age, mbti });
-    start(mbti);
-  };
+    // MBTI별 NPC 프로필 이미지 결정
+    let npcProfile = "/profile_npc.png"; // 기본값
+
+    if (mbti === "INTJ" || mbti === "ISTJ") {
+      npcProfile = "/basic_profile.jpg";   // 업로드한 이미지 사용
+    }
+
+      setUserInfo({ sex, age, mbti });
+      start(mbti);
+    };
 
   return (
     <>
@@ -105,7 +112,7 @@ function App() {
         </div>
       ) : (
         <>
-          <ChatContainer messages={history} />
+          <ChatContainer messages={history} npcProfile={userInfo.npcProfile} />
           {pendingChoice && (
             <ChoiceModal
               question={pendingChoice.question}
