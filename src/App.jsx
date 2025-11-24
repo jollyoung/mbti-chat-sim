@@ -79,6 +79,8 @@ function App() {
     <>
       {!userInfo ? (
         <div className="intro-page animate-fadeup">
+
+          <div className="intro-title">내 MBTI를 공략해보자! ✨</div>
           <form onSubmit={handleStart} className="intro-card">
 
             {/* 성별 */}
