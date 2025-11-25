@@ -47,6 +47,32 @@ const ESTJScenario = {
         }
       ]
     }
+  ],
+
+  // 🔥 여기서부터 마지막 장면 추가
+  estj_intro: [
+    { role: "npc", text: "좋습니다. 그럼 저부터 간단히 소개드리죠." },
+    { role: "npc", text: "저는 현재 프로젝트 매니저로 일하고 있고, 실용적이고 효율적인 걸 좋아합니다." },
+    {
+      type: "choice",
+      question: "대화를 어떻게 마무리할까요?",
+      options: [
+        {
+          label: "저도 간단히 소개드릴게요. 오늘 챗 재밌었습니다!",
+          next: "END",
+          tone: "warm",
+          emotion: "cheerful",
+          comm: "polite"
+        },
+        {
+          label: "네, 다음에 더 이야기 나눠요.",
+          next: "END",
+          tone: "neutral",
+          emotion: "calm",
+          comm: "polite"
+        }
+      ]
+    }
   ]
 };
 

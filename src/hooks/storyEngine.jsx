@@ -113,16 +113,35 @@ export default function useStoryEngine() {
     setHistory((prev) => [...prev, { role: "user", text: option.label }]);
     setPendingChoice(null);
 
+    // 🔥 END 처리
+    if (option.next === "END") {
+      setIsEnding(true);
+      return;
+    }
+
     if (option.next) {
       setCurrentScene(option.next);
       runScene(currentScenario, option.next);
     }
   };
 
+  const restartSameMBTI = () => {
+    start(currentMBTI);
+    setIsEnding(false);
+  };
+
+  const resetToIntro = () => {
+    window.location.reload();
+  };
+
   return {
     history,
     pendingChoice,
     start,
-    choose
+    choose,
+    isEnding,          // 🔥 추가
+    currentMBTI,
+    restartSameMBTI,   // 🔥 추가
+    resetToIntro       // 🔥 추가
   };
 }

@@ -432,3 +432,69 @@
 }
 
 
+.result-wrapper {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  height: 100vh;
+  background: #f2f3f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.result-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  width: 85%;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.result-text {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 22px;
+  line-height: 1.45;
+}
+
+.result-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.retry-btn, .reset-btn {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.retry-btn {
+  background: #6b77ff;
+  color: white;
+}
+
+.retry-btn:hover {
+  background: #5f6ae0;
+}
+
+.reset-btn {
+  background: #e8e8e8;
+  color: #333;
+}
+
+.reset-btn:hover {
+  background: #d8d8d8;
+}
