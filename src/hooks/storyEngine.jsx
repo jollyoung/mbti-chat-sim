@@ -1,12 +1,9 @@
-// src/hooks/storyEngine.jsx
-
 import { useState } from "react";
 
 import INFP from "../stories/INFP.js";
 import INFJ from "../stories/INFJ.js";
 import INTJ from "../stories/INTJ.js";
 import INTP from "../stories/INTP.js";
-
 import ISFP from "../stories/ISFP.js";
 import ISFJ from "../stories/ISFJ.js";
 import ISTP from "../stories/ISTP.js";
@@ -21,13 +18,6 @@ import ESFP from "../stories/ESFP.js";
 import ESFJ from "../stories/ESFJ.js";
 import ESTP from "../stories/ESTP.js";
 import ESTJ from "../stories/ESTJ.js";
-
-const saveChoiceData = (data) => {
-  const prev = JSON.parse(localStorage.getItem("choiceLogs") || "[]");
-  prev.push({ ...data, timestamp: Date.now() });
-  localStorage.setItem("choiceLogs", JSON.stringify(prev));
-};
-
 
 // MBTI별 시나리오 테이블
 const storyTable = {
@@ -49,49 +39,57 @@ const storyTable = {
   ESTJ
 };
 
-
 export default function useStoryEngine() {
-  const [currentMBTI, setCurrentMBTI] = useState(null);
-  const [history, setHistory] = useState([]);       // 화면에 표시되는 대화 히스토리
-  const [currentScenario, setCurrentScenario] = useState(null); 
+  const [history, setHistory] = useState([]);
+  const [currentScenario, setCurrentScenario] = useState(null);
   const [currentScene, setCurrentScene] = useState("intro");
-  const [pendingChoice, setPendingChoice] = useState(null); // ChoiceModal에 전달할 선택지
+  const [pendingChoice, setPendingChoice] = useState(null);
+  const [currentMBTI, setCurrentMBTI] = useState(null);
 
+  // localStorage 저장 기능
+  const saveChoiceData = (data) => {
+    const prev = JSON.parse(localStorage.getItem("choiceLogs") || "[]");
+    prev.push({ ...data, timestamp: Date.now() });
+    localStorage.setItem("choiceLogs", JSON.stringify(prev));
+  };
 
-  /** 시나리오 시작 */
+  /** 🔥 시나리오 시작 */
   const start = (mbti) => {
     const scenario = storyTable[mbti];
 
-    setCurrentMBTI(mbti); 
+    setCurrentMBTI(mbti);
     setCurrentScenario(scenario);
     setHistory([]);
     setCurrentScene("intro");
+
     runScene(scenario, "intro");
   };
 
-
-  /** 현재 씬 실행 */
-  const runScene = (scenario, sceneName) => {
+  /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
+  const runScene = async (scenario, sceneName) => {
     const scene = scenario[sceneName];
     if (!scene) return;
 
-    scene.forEach((item) => {
+    for (const item of scene) {
+
+      // 💬 NPC 대사 출력 (350ms 딜레이)
       if (item.role === "npc") {
+        await new Promise((res) => setTimeout(res, 350));
         setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
       }
 
+      // ❗ 선택지 출력 (각 메시지 이후 300ms 후 등장)
       if (item.type === "choice") {
-        // 선택지가 있다면 일시 정지 → Modal 띄우기
+        await new Promise((res) => setTimeout(res, 300));
         setPendingChoice({
           question: item.question,
           options: item.options
         });
       }
-    });
+    }
   };
 
-
-  /** 선택지 클릭 */
+  /** 🔥 선택지 클릭 */
   const choose = (option) => {
 
     saveChoiceData({
@@ -100,28 +98,24 @@ export default function useStoryEngine() {
       userChoice: option.label,
       tone: option.tone || null,
       emotion: option.emotion || null,
-      comm: option.comm || null,
+      comm: option.comm || null
     });
 
-    setHistory((prev) => [
-      ...prev,
-      { role: "user", text: option.label }
-    ]);
-
+    // 유저 메시지 출력
+    setHistory((prev) => [...prev, { role: "user", text: option.label }]);
     setPendingChoice(null);
 
-    // 다음 씬으로 이동
+    // 다음 씬 이동
     if (option.next) {
       setCurrentScene(option.next);
       runScene(currentScenario, option.next);
     }
   };
 
-
   return {
     history,
     pendingChoice,
     start,
-    choose,
+    choose
   };
 }
