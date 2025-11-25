@@ -3,27 +3,28 @@ import { useState } from "react";
 export default function ChoiceModal({ question, options, onSelect }) {
   const [locked, setLocked] = useState(false);
 
-  const handleClick = (option) => {
+  const handleClick = (opt) => {
     if (locked) return;
     setLocked(true);
-    onSelect(option);
+    onSelect(opt);
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="choice-modal">
-        <p className="choice-question">{question}</p>
+    <div className="choice-overlay">
+      <div className="choice-popup animate-popup">
+        <div className="choice-title">{question}</div>
 
-        {options.map((opt, idx) => (
-          <button
-            key={idx}
-            className="choice-btn"
-            onClick={() => handleClick(opt)}
-            disabled={locked}
-          >
-            {opt.label}
-          </button>
-        ))}
+        <div className="choice-list">
+          {options.map((opt, i) => (
+            <div
+              key={i}
+              className="choice-item"
+              onClick={() => handleClick(opt)}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
