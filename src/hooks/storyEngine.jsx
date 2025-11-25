@@ -67,24 +67,23 @@ export default function useStoryEngine() {
 
   // 🔥 다음 장면 렌더링
   function playScene(sceneArray) {
-    const normalMessages = sceneArray.filter((m) => m.role === "npc");
-    const choiceBlock = sceneArray.find((m) => m.type === "choice");
+  const npcMessages = sceneArray.filter(m => m.role === "npc");
+  const choiceBlock = sceneArray.find(m => m.type === "choice");
 
-    // 일반 메시지 추가
-    setHistory((prev) => [...prev, ...normalMessages]);
+  // ➜ NPC 대사만 history에 추가
+  setHistory(prev => [...prev, ...npcMessages]);
 
-    // 선택지가 없는 장면 = 종료 장면
-    if (!choiceBlock) {
-      setIsEnding(true);
-      return;
-    }
-
-    // 선택지 설정
+  // ➜ 선택지는 pendingChoice로만 저장
+  if (choiceBlock) {
     setPendingChoice({
       question: choiceBlock.question,
-      options: choiceBlock.options,
+      options: choiceBlock.options
     });
+  } else {
+    setIsEnding(true);
   }
+}
+
 
   // 🔥 선택지 처리
   async function choose(option) {
