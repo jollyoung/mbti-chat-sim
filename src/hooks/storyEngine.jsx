@@ -46,9 +46,7 @@ const storyTable = {
   ESFP,
   ESFJ,
   ESTP,
-  ESTJ,
-
-  DEFAULT: baseScenario
+  ESTJ
 };
 
 
@@ -61,7 +59,7 @@ export default function useStoryEngine() {
 
   /** 시나리오 시작 */
   const start = (mbti) => {
-    const scenario = storyTable[mbti] || storyTable.DEFAULT;
+    const scenario = storyTable[mbti];
 
     setCurrentScenario(scenario);
     setHistory([]);
