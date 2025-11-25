@@ -90,22 +90,29 @@ export default function useStoryEngine() {
   };
 
   /** 🔥 선택지 클릭 */
-  const choose = (option) => {
+  const choose = async (option) => {
 
-    saveChoiceData({
+  // 서버로 저장
+  await fetch("/api/logChoice", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
       mbti: currentMBTI,
       scene: currentScene,
       userChoice: option.label,
       tone: option.tone || null,
       emotion: option.emotion || null,
-      comm: option.comm || null
-    });
+      comm: option.comm || null,
+      timestamp: Date.now()
+    })
+  });
 
-    // 유저 메시지 출력
+    // 기존 동작
     setHistory((prev) => [...prev, { role: "user", text: option.label }]);
     setPendingChoice(null);
 
-    // 다음 씬 이동
     if (option.next) {
       setCurrentScene(option.next);
       runScene(currentScenario, option.next);
