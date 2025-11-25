@@ -79,15 +79,24 @@ export default function useStoryEngine() {
         setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
       }
 
-      // ❗ 선택지 출력 (각 메시지 이후 1000ms 후 등장)
+      // ❗ 선택지 출력 (각 메시지 이후 800ms 후 등장)
       if (item.type === "choice") {
-        await new Promise((res) => setTimeout(res, 1000));
+        await new Promise((res) => setTimeout(res, 800));
         setPendingChoice({
           question: item.question,
           options: item.options
         });
       }
     }
+
+    // END 이벤트 처리
+    if (item.type === "end") {
+      // 마지막 NPC 대사 출력 후 약간의 지연
+      await new Promise((res) => setTimeout(res, 800));
+      setIsEnding(true);
+      return;
+    }
+
   };
 
   /** 🔥 선택지 클릭 */
@@ -126,13 +135,22 @@ export default function useStoryEngine() {
   }
 };
 
+  const reset = () => {
+    setHistory([]);
+    setCurrentScenario(null);
+    setCurrentScene("intro");
+    setPendingChoice(null);
+    setCurrentMBTI(null);
+    setIsEnding(false);
+  };
 
   return {
     history,
     pendingChoice,
     start,
     choose,
-    isEnding   // ← App.jsx에서 읽을 수 있게 전달
+    isEnding,
+    reset
   };
 
 }

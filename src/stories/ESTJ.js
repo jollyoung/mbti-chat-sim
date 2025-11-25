@@ -59,21 +59,26 @@ const ESTJScenario = {
       options: [
         {
           label: "저도 간단히 소개드릴게요. 오늘 챗 재밌었습니다!",
-          next: "END",
+          next: "estj_end",
           tone: "warm",
           emotion: "cheerful",
           comm: "polite"
         },
         {
           label: "네, 다음에 더 이야기 나눠요.",
-          next: "END",
+          next: "estj_end",
           tone: "neutral",
           emotion: "calm",
           comm: "polite"
         }
       ]
     }
+  ],
+    estj_end: [
+    { role: "npc", text: "네, 좋은 대화였어요. 다음에 또 이야기 나눠요!" },
+    { type: "end" }
   ]
+  
 };
 
 export default ESTJScenario;
