@@ -22,9 +22,6 @@ import ESFJ from "../stories/ESFJ.js";
 import ESTP from "../stories/ESTP.js";
 import ESTJ from "../stories/ESTJ.js";
 
-// fallback base 시나리오
-import baseScenario from "../stories/base/baseScenario.js";
-
 const saveChoiceData = (data) => {
   const prev = JSON.parse(localStorage.getItem("choiceLogs") || "[]");
   prev.push({ ...data, timestamp: Date.now() });
