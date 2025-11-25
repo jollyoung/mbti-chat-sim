@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ChatContainer from "./components/ChatContainer.jsx";
 import ChoiceModal from "./components/ChoiceModal.jsx";
-import useChatEngine from "./hooks/useChatEngine.jsx";
+import storyEngine from "./hooks/storyEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
 import "./index.css";
 
@@ -46,7 +46,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [age, setAge] = useState("");
 
-  const { history, pendingChoice, start, choose } = useChatEngine();
+  const { history, pendingChoice, start, choose } = storyEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
