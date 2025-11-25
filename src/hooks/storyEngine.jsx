@@ -1,6 +1,6 @@
-import baseScenario from "../stories/base/baseScenario.js";
-import ESTJ from "../stories/ESTJ.js";
-import INFP from "../stories/INFP.js";
+import baseScenario from "../story/base/baseScenario.js";
+import ESTJ from "../story/ESTJ.js";
+import INFP from "../story/INFP.js";
 // ... MBTI 16개 파일 import
 
 export const storyTable = {
