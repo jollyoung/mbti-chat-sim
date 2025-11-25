@@ -46,7 +46,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [age, setAge] = useState("");
 
-  const { history, pendingChoice, start, choose, isEnding } = storyEngine();
+  const { history, pendingChoice, start, choose, isEnding, reset} = storyEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
