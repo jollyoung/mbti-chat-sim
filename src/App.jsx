@@ -42,7 +42,7 @@ export default function App() {
     pendingChoice,
     start,
     choose,
-    isFinished,
+    isEnding,
     currentMBTI,
     restartSameMBTI,
     resetToIntro,
@@ -153,7 +153,7 @@ export default function App() {
   }
 
   // 2) 🔥 엔딩 화면 (시나리오 종료됨)
-  if (isFinished) {
+  if (isEnding) {
     return (
       <div className="ending-page animate-fadeup">
         <div className="ending-card">

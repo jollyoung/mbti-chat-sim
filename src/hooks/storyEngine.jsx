@@ -21,22 +21,10 @@ import ESTJ from "../stories/ESTJ.js";
 
 // MBTI별 시나리오 테이블
 const storyTable = {
-  INFP,
-  INFJ,
-  INTJ,
-  INTP,
-  ISFP,
-  ISFJ,
-  ISTP,
-  ISTJ,
-  ENFP,
-  ENFJ,
-  ENTP,
-  ENTJ,
-  ESFP,
-  ESFJ,
-  ESTP,
-  ESTJ
+  INFP, INFJ, INTJ, INTP,
+  ISFP, ISFJ, ISTP, ISTJ,
+  ENFP, ENFJ, ENTP, ENTJ,
+  ESFP, ESFJ, ESTP, ESTJ
 };
 
 export default function useStoryEngine() {
@@ -46,12 +34,7 @@ export default function useStoryEngine() {
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
 
-  // localStorage 저장 기능
-  const saveChoiceData = (data) => {
-    const prev = JSON.parse(localStorage.getItem("choiceLogs") || "[]");
-    prev.push({ ...data, timestamp: Date.now() });
-    localStorage.setItem("choiceLogs", JSON.stringify(prev));
-  };
+  const [isEnding, setIsEnding] = useState(false);   // 🔥 추가됨
 
   /** 🔥 시나리오 시작 */
   const start = (mbti) => {
@@ -61,24 +44,23 @@ export default function useStoryEngine() {
     setCurrentScenario(scenario);
     setHistory([]);
     setCurrentScene("intro");
+    setIsEnding(false);   // 🔥 엔딩 초기화
 
     runScene(scenario, "intro");
   };
 
-  /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
+  /** 🔥 씬 실행 */
   const runScene = async (scenario, sceneName) => {
     const scene = scenario[sceneName];
     if (!scene) return;
 
     for (const item of scene) {
 
-      // 💬 NPC 대사 출력 (1200ms 딜레이)
       if (item.role === "npc") {
         await new Promise((res) => setTimeout(res, 1200));
         setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
       }
 
-      // ❗ 선택지 출력 (각 메시지 이후 1000ms 후 등장)
       if (item.type === "choice") {
         await new Promise((res) => setTimeout(res, 1000));
         setPendingChoice({
@@ -92,33 +74,32 @@ export default function useStoryEngine() {
   /** 🔥 선택지 클릭 */
   const choose = async (option) => {
 
-  // 서버로 저장
-  await fetch("/api/logChoice", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      mbti: currentMBTI,
-      scene: currentScene,
-      userChoice: option.label,
-      tone: option.tone || null,
-      emotion: option.emotion || null,
-      comm: option.comm || null,
-      timestamp: Date.now()
-    })
-  });
+    // 서버 저장
+    await fetch("/api/logChoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mbti: currentMBTI,
+        scene: currentScene,
+        userChoice: option.label,
+        tone: option.tone || null,
+        emotion: option.emotion || null,
+        comm: option.comm || null,
+        timestamp: Date.now()
+      })
+    });
 
-    // 기존 동작
+    // 사용자 메시지 출력
     setHistory((prev) => [...prev, { role: "user", text: option.label }]);
     setPendingChoice(null);
 
     // 🔥 END 처리
     if (option.next === "END") {
-      setIsEnding(true);
+      setIsEnding(true);      // 🔥 엔딩 상태 진입
       return;
     }
 
+    // 다음 씬 이동
     if (option.next) {
       setCurrentScene(option.next);
       runScene(currentScenario, option.next);
@@ -127,7 +108,6 @@ export default function useStoryEngine() {
 
   const restartSameMBTI = () => {
     start(currentMBTI);
-    setIsEnding(false);
   };
 
   const resetToIntro = () => {
@@ -139,9 +119,9 @@ export default function useStoryEngine() {
     pendingChoice,
     start,
     choose,
-    isEnding,          // 🔥 추가
+    isEnding,            // 🔥 App.jsx에서 받게 되는 상태
     currentMBTI,
-    restartSameMBTI,   // 🔥 추가
-    resetToIntro       // 🔥 추가
+    restartSameMBTI,
+    resetToIntro
   };
 }
