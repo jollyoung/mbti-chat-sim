@@ -7,10 +7,7 @@ export default function ResultPage({ mbti, onRestart, onSelectOther }) {
       <p>다른 MBTI라면 또 다른 방식으로 반응할 수도 있어요 👀</p>
 
       <div className="result-buttons">
-        <button className="retry-btn" onClick={onRestart}>
-          다시 시도하기 🔄
-        </button>
-
+        
         <button className="other-btn" onClick={onSelectOther}>
           다른 MBTI 선택하기 ✨
         </button>

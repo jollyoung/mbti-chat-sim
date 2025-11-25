@@ -175,17 +175,6 @@ function App() {
 
           <div className="result-buttons">
             <button
-              className="retry-btn"
-              onClick={() => {
-                reset();      // storyEngine 초기화
-                setUserInfo(null);  // intro로 돌아감
-              }}
-
-            >
-              다시 시도하기 🔄
-            </button>
-
-            <button
               className="other-btn"
               onClick={() => {
                 reset();      // storyEngine 초기화
