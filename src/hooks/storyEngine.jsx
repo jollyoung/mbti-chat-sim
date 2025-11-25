@@ -51,6 +51,7 @@ const storyTable = {
 
 
 export default function useStoryEngine() {
+  const [currentMBTI, setCurrentMBTI] = useState(null);
   const [history, setHistory] = useState([]);       // 화면에 표시되는 대화 히스토리
   const [currentScenario, setCurrentScenario] = useState(null); 
   const [currentScene, setCurrentScene] = useState("intro");
@@ -61,6 +62,7 @@ export default function useStoryEngine() {
   const start = (mbti) => {
     const scenario = storyTable[mbti];
 
+    setCurrentMBTI(mbti); 
     setCurrentScenario(scenario);
     setHistory([]);
     setCurrentScene("intro");
@@ -93,7 +95,7 @@ export default function useStoryEngine() {
   const choose = (option) => {
 
     saveChoiceData({
-      mbti: currentScenario.mbti || "UNKNOWN",
+      mbti: currentMBTI,
       scene: currentScene,
       userChoice: option.label,
       tone: option.tone || null,
