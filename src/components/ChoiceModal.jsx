@@ -1,22 +1,29 @@
+import { useState } from "react";
+
 export default function ChoiceModal({ question, options, onSelect }) {
-  if (!options || !Array.isArray(options)) return null;
+  const [locked, setLocked] = useState(false);
+
+  const handleClick = (option) => {
+    if (locked) return;
+    setLocked(true);
+    onSelect(option);
+  };
 
   return (
-    <div className="choice-overlay">
-      <div className="choice-popup animate-popup">
-        <h3 className="choice-title">{question}</h3>
+    <div className="modal-backdrop">
+      <div className="choice-modal">
+        <p className="choice-question">{question}</p>
 
-        <div className="choice-list">
-          {options.map((opt, i) => (
-            <div
-              key={i}
-              className="choice-item"
-              onClick={() => onSelect(opt)}
-            >
-              {opt.label}
-            </div>
-          ))}
-        </div>
+        {options.map((opt, idx) => (
+          <button
+            key={idx}
+            className="choice-btn"
+            onClick={() => handleClick(opt)}
+            disabled={locked}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
     </div>
   );
