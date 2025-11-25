@@ -72,15 +72,15 @@ export default function useStoryEngine() {
 
     for (const item of scene) {
 
-      // 💬 NPC 대사 출력 (800ms 딜레이)
+      // 💬 NPC 대사 출력 (1200ms 딜레이)
       if (item.role === "npc") {
-        await new Promise((res) => setTimeout(res, 800));
+        await new Promise((res) => setTimeout(res, 1200));
         setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
       }
 
-      // ❗ 선택지 출력 (각 메시지 이후 600ms 후 등장)
+      // ❗ 선택지 출력 (각 메시지 이후 1000ms 후 등장)
       if (item.type === "choice") {
-        await new Promise((res) => setTimeout(res, 600));
+        await new Promise((res) => setTimeout(res, 1000));
         setPendingChoice({
           question: item.question,
           options: item.options
