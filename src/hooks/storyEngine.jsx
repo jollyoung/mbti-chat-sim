@@ -45,6 +45,7 @@ export default function useStoryEngine() {
   const [currentScene, setCurrentScene] = useState("intro");
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
+  const [isEnding, setIsEnding] = useState(false);
 
   // localStorage 저장 기능
   const saveChoiceData = (data) => {
@@ -91,8 +92,7 @@ export default function useStoryEngine() {
 
   /** 🔥 선택지 클릭 */
   const choose = async (option) => {
-
-  // 서버로 저장
+  // 1) 구글 시트 저장
   await fetch("/api/logChoice", {
     method: "POST",
     headers: {
@@ -109,20 +109,30 @@ export default function useStoryEngine() {
     })
   });
 
-    // 기존 동작
-    setHistory((prev) => [...prev, { role: "user", text: option.label }]);
-    setPendingChoice(null);
+  // 2) 유저 선택 history 에 기록
+  setHistory((prev) => [...prev, { role: "user", text: option.label }]);
+  setPendingChoice(null);
 
-    if (option.next) {
-      setCurrentScene(option.next);
-      runScene(currentScenario, option.next);
-    }
-  };
+  // 3) 종료 처리
+  if (option.next === "END") {
+    setIsEnding(true);      // ← 끝났음을 표시 (새 state 필요)
+    return;
+  }
+
+  // 4) 다음 씬 실행
+  if (option.next) {
+    setCurrentScene(option.next);
+    runScene(currentScenario, option.next);
+  }
+};
+
 
   return {
     history,
     pendingChoice,
     start,
-    choose
+    choose,
+    isEnding   // ← App.jsx에서 읽을 수 있게 전달
   };
+
 }

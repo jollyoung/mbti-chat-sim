@@ -46,7 +46,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [age, setAge] = useState("");
 
-  const { history, pendingChoice, start, choose } = storyEngine();
+  const { history, pendingChoice, start, choose, isEnding } = storyEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
@@ -82,9 +82,9 @@ function App() {
 
   return (
     <>
+      {/* 1️⃣ 아직 시작 전 → 인트로 화면 */}
       {!userInfo ? (
         <div className="intro-page animate-fadeup">
-
           <div className="intro-title">내 MBTI를 공략해보자! ✨</div>
           <form onSubmit={handleStart} className="intro-card">
 
@@ -120,23 +120,16 @@ function App() {
                 value={age}
                 onChange={(e) => {
                   const val = e.target.value;
-
-                  // 빈 문자열이면 그대로 허용 (백스페이스 문제 해결)
                   if (val === "") {
                     setAge("");
                     return;
                   }
-
-                  // 숫자인 경우 그대로 저장
-                  const num = Number(val);
-                  setAge(num);
+                  setAge(Number(val));
                 }}
                 className="input-box"
                 placeholder="나이를 입력하세요"
               />
             </div>
-
-
 
             {/* MBTI 선택 */}
             <div className="form-group">
@@ -165,7 +158,6 @@ function App() {
             <button className="start-btn">시작하기 🚀</button>
           </form>
 
-          {/* 오류 팝업 */}
           {errorMessage && (
             <ErrorPopup
               message={errorMessage}
@@ -173,7 +165,32 @@ function App() {
             />
           )}
         </div>
+      ) : isEnding ? (
+        /* 2️⃣ isEnding = true → 종료 페이지 */
+        <div className="result-page">
+          <h2>{userInfo.mbti} 시나리오 종료 🎉</h2>
+
+          <p>대화가 모두 종료되었어요!</p>
+          <p>다른 MBTI라면 또 다른 방식으로 반응할 수도 있어요 👀</p>
+
+          <div className="result-buttons">
+            <button
+              className="retry-btn"
+              onClick={() => setUserInfo(null)}
+            >
+              다시 시도하기 🔄
+            </button>
+
+            <button
+              className="other-btn"
+              onClick={() => setUserInfo(null)}
+            >
+              다른 MBTI 선택하기 ✨
+            </button>
+          </div>
+        </div>
       ) : (
+        /* 3️⃣ 진행중 → 채팅 화면 */
         <>
           <ChatContainer
             messages={history}
