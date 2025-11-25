@@ -1,132 +1,128 @@
 import { useState } from "react";
 
-// 🔥 모든 MBTI 시나리오 import
-import ESTJScenario from "../stories/ESTJ";
-import ESTPScenario from "../stories/ESTP";
-import ESFJScenario from "../stories/ESFJ";
-import ESFPScenario from "../stories/ESFP";
+import INFP from "../stories/INFP.js";
+import INFJ from "../stories/INFJ.js";
+import INTJ from "../stories/INTJ.js";
+import INTP from "../stories/INTP.js";
+import ISFP from "../stories/ISFP.js";
+import ISFJ from "../stories/ISFJ.js";
+import ISTP from "../stories/ISTP.js";
+import ISTJ from "../stories/ISTJ.js";
 
-import ENTJScenario from "../stories/ENTJ";
-import ENTPScenario from "../stories/ENTP";
-import ENFJScenario from "../stories/ENFJ";
-import ENFPScenario from "../stories/ENFP";
+import ENFP from "../stories/ENFP.js";
+import ENFJ from "../stories/ENFJ.js";
+import ENTP from "../stories/ENTP.js";
+import ENTJ from "../stories/ENTJ.js";
 
-import INTJScenario from "../stories/INTJ";
-import INTPScenario from "../stories/INTP";
-import INFJScenario from "../stories/INFJ";
-import INFPScenario from "../stories/INFP";
+import ESFP from "../stories/ESFP.js";
+import ESFJ from "../stories/ESFJ.js";
+import ESTP from "../stories/ESTP.js";
+import ESTJ from "../stories/ESTJ.js";
 
-import ISTJScenario from "../stories/ISTJ";
-import ISTPScenario from "../stories/ISTP";
-import ISFJScenario from "../stories/ISFJ";
-import ISFPScenario from "../stories/ISFP";
-
-// 🔥 storyTable 직접 구성
-export const storyTable = {
-  ESTJ: ESTJScenario,
-  ESTP: ESTPScenario,
-  ESFJ: ESFJScenario,
-  ESFP: ESFPScenario,
-
-  ENTJ: ENTJScenario,
-  ENTP: ENTPScenario,
-  ENFJ: ENFJScenario,
-  ENFP: ENFPScenario,
-
-  INTJ: INTJScenario,
-  INTP: INTPScenario,
-  INFJ: INFJScenario,
-  INFP: INFPScenario,
-
-  ISTJ: ISTJScenario,
-  ISTP: ISTPScenario,
-  ISFJ: ISFJScenario,
-  ISFP: ISFPScenario,
+// MBTI별 시나리오 테이블
+const storyTable = {
+  INFP,
+  INFJ,
+  INTJ,
+  INTP,
+  ISFP,
+  ISFJ,
+  ISTP,
+  ISTJ,
+  ENFP,
+  ENFJ,
+  ENTP,
+  ENTJ,
+  ESFP,
+  ESFJ,
+  ESTP,
+  ESTJ
 };
-
 
 export default function useStoryEngine() {
   const [history, setHistory] = useState([]);
-  const [currentMBTI, setCurrentMBTI] = useState(null);
+  const [currentScenario, setCurrentScenario] = useState(null);
   const [currentScene, setCurrentScene] = useState("intro");
   const [pendingChoice, setPendingChoice] = useState(null);
-  const [isEnding, setIsEnding] = useState(false);
+  const [currentMBTI, setCurrentMBTI] = useState(null);
 
-  // 🔥 시나리오 시작
-  function start(mbti) {
+  // localStorage 저장 기능
+  const saveChoiceData = (data) => {
+    const prev = JSON.parse(localStorage.getItem("choiceLogs") || "[]");
+    prev.push({ ...data, timestamp: Date.now() });
+    localStorage.setItem("choiceLogs", JSON.stringify(prev));
+  };
+
+  /** 🔥 시나리오 시작 */
+  const start = (mbti) => {
+    const scenario = storyTable[mbti];
+
     setCurrentMBTI(mbti);
+    setCurrentScenario(scenario);
     setHistory([]);
-    setIsEnding(false);
     setCurrentScene("intro");
 
-    const scenario = storyTable[mbti];
-    if (!scenario) return;
+    runScene(scenario, "intro");
+  };
 
-    playScene(scenario["intro"]);
-  }
+  /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
+  const runScene = async (scenario, sceneName) => {
+    const scene = scenario[sceneName];
+    if (!scene) return;
 
-  // 🔥 다음 장면 렌더링
-  function playScene(sceneArray) {
-  const npcMessages = sceneArray.filter(m => m.role === "npc");
-  const choiceBlock = sceneArray.find(m => m.type === "choice");
+    for (const item of scene) {
 
-  // ➜ NPC 대사만 history에 추가
-  setHistory(prev => [...prev, ...npcMessages]);
+      // 💬 NPC 대사 출력 (1200ms 딜레이)
+      if (item.role === "npc") {
+        await new Promise((res) => setTimeout(res, 1200));
+        setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
+      }
 
-  // ➜ 선택지는 pendingChoice로만 저장
-  if (choiceBlock) {
-    setPendingChoice({
-      question: choiceBlock.question,
-      options: choiceBlock.options
-    });
-  } else {
-    setIsEnding(true);
-  }
-}
+      // ❗ 선택지 출력 (각 메시지 이후 1000ms 후 등장)
+      if (item.type === "choice") {
+        await new Promise((res) => setTimeout(res, 1000));
+        setPendingChoice({
+          question: item.question,
+          options: item.options
+        });
+      }
+    }
+  };
 
+  /** 🔥 선택지 클릭 */
+  const choose = async (option) => {
 
-  // 🔥 선택지 처리
-  async function choose(option) {
+  // 서버로 저장
+  await fetch("/api/logChoice", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      mbti: currentMBTI,
+      scene: currentScene,
+      userChoice: option.label,
+      tone: option.tone || null,
+      emotion: option.emotion || null,
+      comm: option.comm || null,
+      timestamp: Date.now()
+    })
+  });
+
+    // 기존 동작
+    setHistory((prev) => [...prev, { role: "user", text: option.label }]);
     setPendingChoice(null);
 
-    // 선택지를 히스토리에 추가
-    setHistory((prev) => [
-      ...prev,
-      { role: "user", text: option.label },
-    ]);
-
-    const scenario = storyTable[currentMBTI];
-    const nextKey = option.next;
-
-    if (!scenario[nextKey]) {
-      setIsEnding(true);
-      return;
+    if (option.next) {
+      setCurrentScene(option.next);
+      runScene(currentScenario, option.next);
     }
-
-    playScene(scenario[nextKey]);
-  }
-
-  // 🔁 같은 MBTI 다시 시작
-  function restartSameMBTI() {
-    start(currentMBTI);
-  }
-
-  // 🔁 초기 화면으로 이동
-  function resetToIntro() {
-    setCurrentMBTI(null);
-    setHistory([]);
-    setIsEnding(false);
-    setCurrentScene("intro");
-  }
+  };
 
   return {
     history,
     pendingChoice,
     start,
-    choose,
-    isEnding,
-    currentMBTI,
-    restartSameMBTI,
-    resetToIntro,
+    choose
   };
 }

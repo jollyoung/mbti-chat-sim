@@ -3,8 +3,10 @@ import { useState } from "react";
 export default function ChoiceModal({ question, options, onSelect }) {
   const [locked, setLocked] = useState(false);
 
+  if (!options || !Array.isArray(options)) return null;
+
   const handleClick = (opt) => {
-    if (locked) return;
+    if (locked) return;       // 이미 선택했으면 무시
     setLocked(true);
     onSelect(opt);
   };
@@ -12,7 +14,7 @@ export default function ChoiceModal({ question, options, onSelect }) {
   return (
     <div className="choice-overlay">
       <div className="choice-popup animate-popup">
-        <div className="choice-title">{question}</div>
+        <h3 className="choice-title">{question}</h3>
 
         <div className="choice-list">
           {options.map((opt, i) => (

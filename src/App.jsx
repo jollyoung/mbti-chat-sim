@@ -1,59 +1,101 @@
 import { useState } from "react";
 import ChatContainer from "./components/ChatContainer.jsx";
 import ChoiceModal from "./components/ChoiceModal.jsx";
+import storyEngine from "./hooks/storyEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
-import ResultPage from "./components/ResultPage.jsx";
+import "./index.css";
 
-import useStoryEngine from "./hooks/storyEngine.jsx";
+/* MBTI별 프로필 매핑 */
+const MBTI_PROFILE_MAP = {
+  // 기본 프로필 그룹
+  ISTJ: "/basic_profile.jpg",
+  INTJ: "/basic_profile.jpg",
+  ISTP: "/basic_profile.jpg",
+
+  // 반려동물 그룹
+  INFP: "/pet_profile.png",
+  ISFJ: "/pet_profile.png",
+
+  // 감성 사진 그룹
+  INFJ: "/mood_profile.png",
+  ISFP: "/mood_profile.png",
+
+  // 밈(meme) 그룹
+  INTP: "/meme_profile.png",
+  ENTP: "/meme_profile.png",
+
+  // 포멀(정장) 그룹
+  ESTJ: "/formal_profile.png",
+  ENTJ: "/formal_profile.png",
+
+  // 화려한 셀카 그룹
+  ENFJ: "/selfie_profile.png",
+  ENFP: "/selfie_profile.png",
+  ESFJ: "/selfie_profile.png",
+
+  // 여행 그룹
+  ESTP: "/travel_profile.png",
+  ESFP: "/travel_profile.png",
+};
+
+const DEFAULT_NPC_PROFILE = "/profile_npc.png";
 
 function App() {
-  const {
-    history,
-    pendingChoice,
-    start,
-    choose,
-    isEnding,
-    currentMBTI,
-    restartSameMBTI,
-    resetToIntro
-  } = useStoryEngine();
-
+  const [userInfo, setUserInfo] = useState(null);
   const [selectedGender, setSelectedGender] = useState("");
-  const [age, setAge] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [age, setAge] = useState("");
+
+  const { history, pendingChoice, start, choose } = storyEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
 
-    if (!selectedGender) return setErrorMessage("성별을 선택해주세요!");
-    if (!age) return setErrorMessage("나이를 입력해주세요!");
-
+    const sex = e.target.sex.value;
     const mbti = e.target.mbti.value;
-    if (!mbti) return setErrorMessage("MBTI를 선택해주세요!");
 
+    if (!sex) {
+      setErrorMessage("성별을 선택해주세요!");
+      return;
+    }
+
+    if (!mbti) {
+      setErrorMessage("MBTI를 선택해주세요!");
+      return;
+    }
+
+    if (age === "") {
+      setErrorMessage("나이를 입력해주세요!");
+      return;
+    }
+
+    // 🔥 MBTI별 NPC 프로필 자동 결정
+    let npcProfile = DEFAULT_NPC_PROFILE;
+
+    if (MBTI_PROFILE_MAP[mbti]) {
+      npcProfile = MBTI_PROFILE_MAP[mbti];
+    }
+
+    setUserInfo({ sex, age, mbti, npcProfile });
     start(mbti);
   };
 
   return (
     <>
-      {!currentMBTI ? (
+      {!userInfo ? (
         <div className="intro-page animate-fadeup">
 
-          {/* 🔥 타이틀 복원 */}
-          <h1 className="intro-title">내 MBTI를 공략해보자! ✨</h1>
-
+          <div className="intro-title">내 MBTI를 공략해보자! ✨</div>
           <form onSubmit={handleStart} className="intro-card">
 
+            {/* 성별 */}
             <div className="form-group">
               <label>성별</label>
               <input type="hidden" name="sex" value={selectedGender} />
-
               <div className="gender-select">
                 <button
                   type="button"
-                  className={`gender-btn ${
-                    selectedGender === "male" ? "active" : ""
-                  }`}
+                  className={`gender-btn ${selectedGender === "male" ? "active" : ""}`}
                   onClick={() => setSelectedGender("male")}
                 >
                   남성
@@ -61,9 +103,7 @@ function App() {
 
                 <button
                   type="button"
-                  className={`gender-btn ${
-                    selectedGender === "female" ? "active" : ""
-                  }`}
+                  className={`gender-btn ${selectedGender === "female" ? "active" : ""}`}
                   onClick={() => setSelectedGender("female")}
                 >
                   여성
@@ -71,36 +111,61 @@ function App() {
               </div>
             </div>
 
+            {/* 나이 */}
             <div className="form-group">
               <label>나이</label>
               <input
                 type="number"
-                className="input-box"
                 name="age"
                 value={age}
+                onChange={(e) => {
+                  const val = e.target.value;
+
+                  // 빈 문자열이면 그대로 허용 (백스페이스 문제 해결)
+                  if (val === "") {
+                    setAge("");
+                    return;
+                  }
+
+                  // 숫자인 경우 그대로 저장
+                  const num = Number(val);
+                  setAge(num);
+                }}
+                className="input-box"
                 placeholder="나이를 입력하세요"
-                onChange={(e) => setAge(e.target.value)}
               />
             </div>
 
+
+
+            {/* MBTI 선택 */}
             <div className="form-group">
               <label>나의 MBTI</label>
-              <select name="mbti" className="input-box">
+              <select name="mbti" className="input-box" required>
                 <option value="">선택하세요</option>
-                {[
-                  "INFP","INFJ","INTP","INTJ",
-                  "ENFP","ENFJ","ENTP","ENTJ",
-                  "ISFP","ISFJ","ISTP","ISTJ",
-                  "ESFP","ESFJ","ESTP","ESTJ",
-                ].map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
+                <option value="INFP">INFP</option>
+                <option value="INFJ">INFJ</option>
+                <option value="INTP">INTP</option>
+                <option value="INTJ">INTJ</option>
+                <option value="ISFP">ISFP</option>
+                <option value="ISFJ">ISFJ</option>
+                <option value="ISTP">ISTP</option>
+                <option value="ISTJ">ISTJ</option>
+                <option value="ENFP">ENFP</option>
+                <option value="ENFJ">ENFJ</option>
+                <option value="ENTP">ENTP</option>
+                <option value="ENTJ">ENTJ</option>
+                <option value="ESFP">ESFP</option>
+                <option value="ESFJ">ESFJ</option>
+                <option value="ESTP">ESTP</option>
+                <option value="ESTJ">ESTJ</option>
               </select>
             </div>
 
             <button className="start-btn">시작하기 🚀</button>
           </form>
 
+          {/* 오류 팝업 */}
           {errorMessage && (
             <ErrorPopup
               message={errorMessage}
@@ -108,15 +173,13 @@ function App() {
             />
           )}
         </div>
-      ) : isEnding ? (
-        <ResultPage
-          currentMBTI={currentMBTI}
-          restart={restartSameMBTI}
-          reset={resetToIntro}
-        />
       ) : (
         <>
-          <ChatContainer messages={history} />
+          <ChatContainer
+            messages={history}
+            npcProfile={userInfo.npcProfile}
+          />
+
           {pendingChoice && (
             <ChoiceModal
               question={pendingChoice.question}
