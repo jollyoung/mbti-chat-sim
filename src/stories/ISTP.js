@@ -11,7 +11,8 @@ const baseScenario = {
     }
   ],
   start1: [
-    { role: "npc", text: "이야기 나눠보고 싶어서 연락드렸어요." }
+    { role: "npc", text: "이야기 나눠보고 싶어서 연락드렸어요." },
+    { type: "end" }
   ]
 };
 

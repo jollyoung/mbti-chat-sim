@@ -87,9 +87,9 @@ export default function useStoryEngine() {
         return;
       }
 
-      // ❗ 선택지 출력 (각 메시지 이후 800ms 후 등장)
+      // ❗ 선택지 출력 (각 메시지 이후 500ms 후 등장)
       if (item.type === "choice") {
-        await new Promise((res) => setTimeout(res, 800));
+        await new Promise((res) => setTimeout(res, 500));
         setPendingChoice({
           question: item.question,
           options: item.options
