@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { storyTable } from "./storyEngine";  // MBTI별 시나리오 저장용 객체
 
 export default function useChatEngine() {
   const [messages, setMessages] = useState([]);
