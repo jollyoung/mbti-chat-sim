@@ -80,6 +80,39 @@ export default function useStoryEngine() {
   };
 
   /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
+  /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
+  const runScene = async (scenario, sceneName) => {
+    const scene = scenario[sceneName];
+    if (!scene) return;
+
+    for (const item of scene) {
+
+      // 💬 NPC 대사 출력 (800ms 딜레이)
+      if (item.role === "npc") {
+        await new Promise((res) => setTimeout(res, 800));
+        setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
+      }
+
+      // END 이벤트 처리
+      if (item.type === "end") {
+        // 마지막 NPC 대사 출력 후 약간의 지연
+        await new Promise((res) => setTimeout(res, 1000));
+        setIsEnding(true);
+        return;
+      }
+
+      // ❗ 선택지 출력 (각 메시지 이후 800ms 후 등장)
+      if (item.type === "choice") {
+        await new Promise((res) => setTimeout(res, 800));
+        setPendingChoice({
+          question: item.question,
+          options: item.options
+        });
+      }
+    }
+
+  };
+
   const choose = async (option) => {
     setPendingChoice(null);
     setHistory((prev) => [...prev, { role: "user", text: option.label }]);
