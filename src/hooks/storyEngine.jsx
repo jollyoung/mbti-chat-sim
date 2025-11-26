@@ -39,6 +39,11 @@ const storyTable = {
   ESTJ
 };
 
+// UUID 생성기
+function createSessionId() {
+  return crypto.randomUUID();
+}
+
 export default function useStoryEngine() {
   const [history, setHistory] = useState([]);
   const [currentScenario, setCurrentScenario] = useState(null);
@@ -61,7 +66,13 @@ export default function useStoryEngine() {
     setCurrentMBTI(mbti);
     setCurrentScenario(scenario);
     setHistory([]);
+    setPendingChoice(null);
     setCurrentScene("intro");
+    setIsEnding(false);
+
+    // 세션 리셋
+    setSessionId(createSessionId());
+    setStep(0);
 
     runScene(scenario, "intro");
   };
@@ -82,7 +93,7 @@ export default function useStoryEngine() {
       // END 이벤트 처리
       if (item.type === "end") {
         // 마지막 NPC 대사 출력 후 약간의 지연
-        await new Promise((res) => setTimeout(res, 800));
+        await new Promise((res) => setTimeout(res, 1000));
         setIsEnding(true);
         return;
       }
@@ -99,15 +110,21 @@ export default function useStoryEngine() {
 
   };
 
-  /** 🔥 선택지 클릭 */
-  const choose = async (option) => {
-  // 1) 구글 시트 저장
+const choose = async (option) => {
+  setPendingChoice(null);
+  setHistory((prev) => [...prev, { role: "user", text: option.label }]);
+
+  // 🔥 step 증가
+  const nextStep = step + 1;
+  setStep(nextStep);
+
+  // 🔥 구글 시트 저장
   await fetch("/api/logChoice", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      sessionId,
+      step: nextStep,
       mbti: currentMBTI,
       scene: currentScene,
       userChoice: option.label,
@@ -118,22 +135,16 @@ export default function useStoryEngine() {
     })
   });
 
-  // 2) 유저 선택 history 에 기록
-  setHistory((prev) => [...prev, { role: "user", text: option.label }]);
-  setPendingChoice(null);
-
-  // 3) 종료 처리
+  // 🔥 다음 씬으로 이동
   if (option.next === "END") {
-    setIsEnding(true);      // ← 끝났음을 표시 (새 state 필요)
+    setIsEnding(true);
     return;
-  }
-
-  // 4) 다음 씬 실행
-  if (option.next) {
+  } else if (option.next) {
     setCurrentScene(option.next);
     runScene(currentScenario, option.next);
   }
 };
+
 
   const reset = () => {
     setHistory([]);
