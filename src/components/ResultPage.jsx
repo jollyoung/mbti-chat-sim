@@ -1,12 +1,11 @@
+// src/components/ResultPage.jsx
+
 export default function ResultPage({ mbti, onSelectOther }) {
   return (
-    <div className="result-wrapper">
+    <div className="result-wrapper animate-fadeup">
+      <div className="result-card">
 
-      <div className="result-card animate-fadeup">
-
-        <h2 className="result-title">
-          {mbti} 시나리오 종료 🎉
-        </h2>
+        <h2 className="result-title">{mbti} 시나리오 종료 🎉</h2>
 
         <p className="result-desc">
           대화를 모두 마쳤어요! <br />
