@@ -1,6 +1,12 @@
+import { useEffect } from "react";
+
 export default function ErrorPopup({ message, onClose }) {
   // 2초 뒤 자동 닫힘
-  setTimeout(onClose, 1800);
+  useEffect(() => {
+    const timeoutId = setTimeout(onClose, 1800);
+
+    return () => clearTimeout(timeoutId);
+  }, [message, onClose]);
 
   return (
     <div className="error-overlay">
