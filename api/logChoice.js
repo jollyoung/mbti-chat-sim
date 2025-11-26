@@ -1,17 +1,12 @@
-// api/logChoice.js
 import { google } from "googleapis";
 
-export const config = {
-  runtime: "edge",
-};
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "POST only" });
+  }
 
-export default async function handler(req) {
   try {
-    const body = await req.json();
-
     const {
-      sessionId,
-      step,
       mbti,
       scene,
       userChoice,
@@ -19,51 +14,45 @@ export default async function handler(req) {
       emotion,
       comm,
       timestamp
-    } = body;
+    } = req.body;
 
-    // ---- Google Auth ----
+    // Service account 인증
     const auth = new google.auth.GoogleAuth({
       credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+        type: "service_account",
+        project_id: process.env.GCP_PROJECT_ID,
+        private_key: process.env.GCP_PRIVATE_KEY.replace(/\\n/g, "\n"),
+        client_email: process.env.GCP_CLIENT_EMAIL,
       },
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
 
     const sheets = google.sheets({ version: "v4", auth });
 
     const spreadsheetId = process.env.SHEET_ID;
-    const range = "Sheet1!A1";
 
-    // ---- Append Row ----
+    // 데이터 추가
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range,
+      range: "Sheet1!A1",
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [
-          [
-            sessionId,   // 🔥 추가됨
-            step,        // 🔥 추가됨
-            mbti,
-            scene,
-            userChoice,
-            tone,
-            emotion,
-            comm,
-            new Date(timestamp).toISOString()
-          ],
-        ],
-      },
+        values: [[
+          mbti,
+          scene,
+          userChoice,
+          tone,
+          emotion,
+          comm,
+          new Date(timestamp).toISOString()
+        ]]
+      }
     });
 
-    return new Response(
-      JSON.stringify({ message: "Success" }),
-      { status: 200 }
-    );
+    return res.status(200).json({ success: true });
+
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-    });
+    console.error("Google Sheets Append Error:", err);
+    return res.status(500).json({ error: "Server Error", details: err });
   }
 }
