@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ChoiceModal({ question, options, onSelect }) {
   const [locked, setLocked] = useState(false);
+
+  useEffect(() => {
+    setLocked(false);
+  }, [question, options]);
 
   if (!options || !Array.isArray(options)) return null;
 
