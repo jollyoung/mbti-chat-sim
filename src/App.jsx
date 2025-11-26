@@ -3,6 +3,7 @@ import ChatContainer from "./components/ChatContainer.jsx";
 import ChoiceModal from "./components/ChoiceModal.jsx";
 import storyEngine from "./hooks/storyEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
+import ResultPage from "./components/ResultPage.jsx";
 import "./index.css";
 
 /* MBTI별 프로필 매핑 */
@@ -166,26 +167,14 @@ function App() {
           )}
         </div>
       ) : isEnding ? (
-        /* 2️⃣ isEnding = true → 종료 페이지 */
-        <div className="result-page">
-          <h2>{userInfo.mbti} 시나리오 종료 🎉</h2>
-
-          <p>대화가 모두 종료되었어요!</p>
-          <p>다른 MBTI라면 또 다른 방식으로 반응할 수도 있어요 👀</p>
-
-          <div className="result-buttons">
-            <button
-              className="other-btn"
-              onClick={() => {
-                reset();      // storyEngine 초기화
-                setUserInfo(null);  // intro로 돌아감
-              }}
-
-            >
-              다른 MBTI 선택하기 ✨
-            </button>
-          </div>
-        </div>
+        /* 결과 페이지 */
+        <ResultPage
+          mbti={userInfo.mbti}
+          onSelectOther={() => {
+            reset();
+            setUserInfo(null);
+          }}
+        />
       ) : (
         /* 3️⃣ 진행중 → 채팅 화면 */
         <>
