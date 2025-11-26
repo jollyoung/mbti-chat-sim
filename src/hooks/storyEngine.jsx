@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import INFP from "../stories/INFP.js";
 import INFJ from "../stories/INFJ.js";
@@ -39,16 +39,14 @@ const storyTable = {
   ESTJ
 };
 
-const [sessionId, setSessionId] = useState(null);
-const [step, setStep] = useState(0);
-
-
 // UUID 생성기
 function createSessionId() {
   return crypto.randomUUID();
 }
 
 export default function useStoryEngine() {
+  const sessionIdRef = useRef(createSessionId());
+  const stepRef = useRef(0);
   const [history, setHistory] = useState([]);
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentScene, setCurrentScene] = useState("intro");
@@ -75,79 +73,47 @@ export default function useStoryEngine() {
     setIsEnding(false);
 
     // 세션 리셋
-    setSessionId(createSessionId());
-    setStep(0);
+    sessionIdRef.current = createSessionId();
+    stepRef.current = 0;
 
     runScene(scenario, "intro");
   };
 
   /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
-  const runScene = async (scenario, sceneName) => {
-    const scene = scenario[sceneName];
-    if (!scene) return;
+  const choose = async (option) => {
+    setPendingChoice(null);
+    setHistory((prev) => [...prev, { role: "user", text: option.label }]);
 
-    for (const item of scene) {
+    // 🔥 step 증가
+    const nextStep = stepRef.current + 1;
+    stepRef.current = nextStep;
 
-      // 💬 NPC 대사 출력 (1200ms 딜레이)
-      if (item.role === "npc") {
-        await new Promise((res) => setTimeout(res, 1200));
-        setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
-      }
+    // 🔥 구글 시트 저장
+    await fetch("/api/logChoice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: sessionIdRef.current,
+        step: nextStep,
+        mbti: currentMBTI,
+        scene: currentScene,
+        userChoice: option.label,
+        tone: option.tone || null,
+        emotion: option.emotion || null,
+        comm: option.comm || null,
+        timestamp: Date.now()
+      })
+    });
 
-      // END 이벤트 처리
-      if (item.type === "end") {
-        // 마지막 NPC 대사 출력 후 약간의 지연
-        await new Promise((res) => setTimeout(res, 1000));
-        setIsEnding(true);
-        return;
-      }
-
-      // ❗ 선택지 출력 (각 메시지 이후 500ms 후 등장)
-      if (item.type === "choice") {
-        await new Promise((res) => setTimeout(res, 500));
-        setPendingChoice({
-          question: item.question,
-          options: item.options
-        });
-      }
+    // 🔥 다음 씬으로 이동
+    if (option.next === "END") {
+      setIsEnding(true);
+      return;
+    } else if (option.next) {
+      setCurrentScene(option.next);
+      runScene(currentScenario, option.next);
     }
-
   };
-
-const choose = async (option) => {
-  setPendingChoice(null);
-  setHistory((prev) => [...prev, { role: "user", text: option.label }]);
-
-  // 🔥 step 증가
-  const nextStep = step + 1;
-  setStep(nextStep);
-
-  // 🔥 구글 시트 저장
-  await fetch("/api/logChoice", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      sessionId,
-      step: nextStep,
-      mbti: currentMBTI,
-      scene: currentScene,
-      userChoice: option.label,
-      tone: option.tone || null,
-      emotion: option.emotion || null,
-      comm: option.comm || null,
-      timestamp: Date.now()
-    })
-  });
-
-  // 🔥 다음 씬으로 이동
-  if (option.next === "END") {
-    setIsEnding(true);
-    return;
-  } else if (option.next) {
-    setCurrentScene(option.next);
-    runScene(currentScenario, option.next);
-  }
-};
 
 
   const reset = () => {
@@ -157,9 +123,8 @@ const choose = async (option) => {
     setPendingChoice(null);
     setCurrentMBTI(null);
     setIsEnding(false);
-
-    setSessionId(createSessionId());
-    setStep(0);
+    sessionIdRef.current = createSessionId();
+    stepRef.current = 0;
   };
 
 
