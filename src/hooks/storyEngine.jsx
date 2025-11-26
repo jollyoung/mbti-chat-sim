@@ -39,6 +39,10 @@ const storyTable = {
   ESTJ
 };
 
+const [sessionId, setSessionId] = useState(null);
+const [step, setStep] = useState(0);
+
+
 // UUID 생성기
 function createSessionId() {
   return crypto.randomUUID();
@@ -153,6 +157,9 @@ const choose = async (option) => {
     setPendingChoice(null);
     setCurrentMBTI(null);
     setIsEnding(false);
+
+    setSessionId(createSessionId());
+    setStep(0);
   };
 
 

@@ -1,11 +1,14 @@
+// api/logChoice.js
 import { google } from "googleapis";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
+export const config = {
+  runtime: "edge",
+};
 
+export default async function handler(req) {
   try {
+    const body = await req.json();
+
     const {
       sessionId,
       step,
@@ -15,16 +18,15 @@ export default async function handler(req, res) {
       tone,
       emotion,
       comm,
-      timestamp,
-    } = req.body;
+      timestamp
+    } = body;
 
-    if (!sessionId || !mbti || !scene || !userChoice) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    // Google 인증
+    // ---- Google Auth ----
     const auth = new google.auth.GoogleAuth({
-      credentials: JSON.parse(process.env.GOOGLE_SERVICE_KEY),
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+      },
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
@@ -33,30 +35,35 @@ export default async function handler(req, res) {
     const spreadsheetId = process.env.SHEET_ID;
     const range = "Sheet1!A1";
 
-    const values = [
-      [
-        sessionId,
-        step,
-        mbti,
-        scene,
-        userChoice,
-        tone || "",
-        emotion || "",
-        comm || "",
-        new Date(timestamp).toISOString(),
-      ],
-    ];
-
+    // ---- Append Row ----
     await sheets.spreadsheets.values.append({
       spreadsheetId,
       range,
       valueInputOption: "USER_ENTERED",
-      requestBody: { values },
+      requestBody: {
+        values: [
+          [
+            sessionId,   // 🔥 추가됨
+            step,        // 🔥 추가됨
+            mbti,
+            scene,
+            userChoice,
+            tone,
+            emotion,
+            comm,
+            new Date(timestamp).toISOString()
+          ],
+        ],
+      },
     });
 
-    return res.status(200).json({ message: "Logged successfully" });
+    return new Response(
+      JSON.stringify({ message: "Success" }),
+      { status: 200 }
+    );
   } catch (err) {
-    console.error("Google Sheets Append Error:", err);
-    return res.status(500).json({ error: "Google Sheets Error" });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
   }
 }
