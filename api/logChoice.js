@@ -1,4 +1,9 @@
-import { appendRow, createSheetsClient, ensureEnvironment } from "./utils/sheets.js";
+import {
+  appendRow,
+  createSheetsClient,
+  ensureEnvironment,
+  ensureSheetExists,
+} from "./utils/sheets.js";
 import { validateChoicePayload } from "./utils/validation.js";
 
 const rateLimitMap = new Map();
@@ -67,6 +72,11 @@ export default async function handler(req, res) {
 
   try {
     const sheets = createSheetsClient();
+    await ensureSheetExists({
+      sheets,
+      spreadsheetId: process.env.SHEET_ID,
+      sheetName: "Sheet1",
+    });
     await appendRow({
       sheets,
       spreadsheetId: process.env.SHEET_ID,

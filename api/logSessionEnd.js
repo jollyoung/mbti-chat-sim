@@ -1,7 +1,17 @@
-import { appendRow, createSheetsClient, ensureEnvironment } from "./utils/sheets.js";
+import {
+  appendRow,
+  createSheetsClient,
+  ensureEnvironment,
+  ensureSheetExists,
+} from "./utils/sheets.js";
 import { validateSessionEndPayload } from "./utils/validation.js";
 
 const SESSION_LOG_RANGE = process.env.SESSION_LOG_RANGE || "SessionLogs!A1";
+
+function getSheetTitle(range) {
+  const [sheetTitle] = range.split("!");
+  return sheetTitle || "Sheet1";
+}
 
 function buildErrorResponse(res, status, message) {
   return res.status(status).json({ error: message });
@@ -38,6 +48,11 @@ export default async function handler(req, res) {
 
   try {
     const sheets = createSheetsClient();
+    await ensureSheetExists({
+      sheets,
+      spreadsheetId: process.env.SHEET_ID,
+      sheetName: getSheetTitle(SESSION_LOG_RANGE),
+    });
     await appendRow({
       sheets,
       spreadsheetId: process.env.SHEET_ID,
