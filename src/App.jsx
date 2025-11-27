@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ChatContainer from "./components/ChatContainer.jsx";
 import ChoiceModal from "./components/ChoiceModal.jsx";
-import storyEngine from "./hooks/storyEngine.jsx";
+import { useStoryEngine } from "./hooks/storyEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
 import ResultPage from "./components/ResultPage.jsx";
 import "./index.css";
@@ -57,7 +57,7 @@ function App() {
     reset,
     engineError,
     clearEngineError,
-  } = storyEngine();
+  } = useStoryEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
