@@ -56,7 +56,7 @@ export function useStoryEngine() {
 
   const logMessage = async (data) => {
     try {
-      // await axios.post("/api/logMessage", data);
+      await axios.post("/api/logMessage", data);
     } catch (err) {
       console.warn("로그 전송 실패:", err.message);
     }
@@ -64,9 +64,9 @@ export function useStoryEngine() {
 
   const logSessionEnd = async () => {
     try {
-      // await axios.post("/api/logSession", {
-      //   sessionId: sessionIdRef.current,
-      // });
+      await axios.post("/api/logSession", {
+        sessionId: sessionIdRef.current,
+      });
     } catch (err) {
       console.warn("세션 종료 로그 실패:", err.message);
     }
