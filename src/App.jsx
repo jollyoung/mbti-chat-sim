@@ -5,6 +5,7 @@ import storyEngine from "./hooks/storyEngine.jsx";
 import ErrorPopup from "./components/ErrorPopup.jsx";
 import ResultPage from "./components/ResultPage.jsx";
 import "./index.css";
+import { STRINGS } from "./constants/strings.js";
 
 /* MBTI별 프로필 매핑 */
 const MBTI_PROFILE_MAP = {
@@ -47,7 +48,16 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
   const [age, setAge] = useState("");
 
-  const { history, pendingChoice, start, choose, isEnding, reset} = storyEngine();
+  const {
+    history,
+    pendingChoice,
+    start,
+    choose,
+    isEnding,
+    reset,
+    engineError,
+    clearEngineError,
+  } = storyEngine();
 
   const handleStart = (e) => {
     e.preventDefault();
@@ -56,17 +66,17 @@ function App() {
     const mbti = e.target.mbti.value;
 
     if (!sex) {
-      setErrorMessage("성별을 선택해주세요!");
+      setErrorMessage(STRINGS.genderRequired);
       return;
     }
 
     if (!mbti) {
-      setErrorMessage("MBTI를 선택해주세요!");
+      setErrorMessage(STRINGS.mbtiRequired);
       return;
     }
 
     if (age === "") {
-      setErrorMessage("나이를 입력해주세요!");
+      setErrorMessage(STRINGS.ageRequired);
       return;
     }
 
@@ -86,7 +96,7 @@ function App() {
       {/* 1️⃣ 아직 시작 전 → 인트로 화면 */}
       {!userInfo ? (
         <div className="intro-page animate-fadeup">
-          <div className="intro-title">내 MBTI를 공략해보자! ✨</div>
+          <div className="intro-title">{STRINGS.introTitle}</div>
           <form onSubmit={handleStart} className="intro-card">
 
             {/* 성별 */}
@@ -191,6 +201,12 @@ function App() {
             />
           )}
         </>
+      )}
+      {engineError && (
+        <ErrorPopup
+          message={engineError}
+          onClose={clearEngineError}
+        />
       )}
     </>
   );

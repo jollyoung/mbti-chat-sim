@@ -1,0 +1,48 @@
+export const REQUIRED_ENV_VARS = [
+  "GCP_PROJECT_ID",
+  "GCP_PRIVATE_KEY",
+  "GCP_CLIENT_EMAIL",
+  "SHEET_ID"
+];
+
+export function findMissingEnv(env = process.env) {
+  return REQUIRED_ENV_VARS.filter((key) => !env[key]);
+}
+
+export function validateChoicePayload(body = {}) {
+  const { mbti, scene, userChoice, tone = null, emotion = null, comm = null } = body;
+
+  if (!mbti || !scene || !userChoice) {
+    return { error: "mbti, scene, and userChoice are required." };
+  }
+
+  return {
+    data: {
+      mbti,
+      scene,
+      userChoice,
+      tone,
+      emotion,
+      comm,
+      timestamp: Date.now(),
+      sessionId: body.sessionId || null,
+      step: body.step ?? null
+    }
+  };
+}
+
+export function validateSessionEndPayload(body = {}) {
+  const { sessionId, mbti } = body;
+
+  if (!sessionId || !mbti) {
+    return { error: "sessionId and mbti are required." };
+  }
+
+  return {
+    data: {
+      sessionId,
+      mbti,
+      endedAt: Date.now()
+    }
+  };
+}
