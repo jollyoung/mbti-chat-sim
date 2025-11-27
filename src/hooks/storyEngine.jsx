@@ -2,18 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 // 시나리오 테이블
-import INFP from "../scenarios/INFP";
-import INFJ from "../scenarios/INFJ";
-import INTJ from "../scenarios/INTJ";
-import ISFP from "../scenarios/ISFP";
-import ESTJ from "../scenarios/ESTJ";
-import ENTP from "../scenarios/ENTP";
-import ENTJ from "../scenarios/ENTJ";
-import ESFP from "../scenarios/ESFP";
-import ENFP from "../scenarios/ENFP";
-import ISFJ from "../scenarios/ISFJ";
-import ISTP from "../scenarios/ISTP";
-import ISTJ from "../scenarios/ISTJ";
+import INFP from "../stories/INFP";
+import INFJ from "../stories/INFJ";
+import INTJ from "../stories/INTJ";
+import ISFP from "../stories/ISFP";
+import ESTJ from "../stories/ESTJ";
+import ENTP from "../stories/ENTP";
+import ENTJ from "../stories/ENTJ";
+import ESFP from "../stories/ESFP";
+import ENFP from "../stories/ENFP";
+import ISFJ from "../stories/ISFJ";
+import ISTP from "../stories/ISTP";
+import ISTJ from "../stories/ISTJ";
 
 // 세션 ID 생성
 const createSessionId = () => {
