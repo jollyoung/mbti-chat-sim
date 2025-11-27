@@ -10,35 +10,34 @@ import { STRINGS } from "./constants/strings.js";
 /* MBTI별 프로필 매핑 */
 const MBTI_PROFILE_MAP = {
   // 기본 프로필 그룹
-  ISTJ: "/public/basic_profile.jpg",
-  INTJ: "/public/basic_profile.jpg",
-  ISTP: "/public/basic_profile.jpg",
+  ISTJ: "basic_profile.jpg",
+  INTJ: "basic_profile.jpg",
+  ISTP: "basic_profile.jpg",
 
   // 반려동물 그룹
-  INFP: "/public/basic_profile.jpg",
-  ISFJ: "/public/basic_profile.jpg",
+  INFP: "basic_profile.jpg",
+  ISFJ: "basic_profile.jpg",
 
   // 감성 사진 그룹
-  INFJ: "/public/mood_profile.png",
-  ISFP: "/public/mood_profile.png",
-
+  INFJ: "mood_profile.png",
+  ISFP: "mood_profile.png",
   // 밈(meme) 그룹
   INTP: "/public/meme_profile.png",
   ENTP: "/public/meme_profile.png",
 
   // 포멀(정장) 그룹
-  ESTJ: "/public/formal_profile.png",
-  ENTJ: "/public/formal_profile.png",
+  ESTJ: "formal_profile.png",
+  ENTJ: "formal_profile.png",
   // 화려한 셀카 그룹
-  ENFJ: "/public/selfie_profile.png",
-  ENFP: "/public/selfie_profile.png",
-  ESFJ: "/public/selfie_profile.png",
+  ENFJ: "selfie_profile.png",
+  ENFP: "selfie_profile.png",
+  ESFJ: "selfie_profile.png",
   // 여행 그룹
-  ESTP: "/public/travel_profile.png",
-  ESFP: "/public/travel_profile.png",
+  ESTP: "travel_profile.png",
+  ESFP: "travel_profile.png",
 };
 
-const DEFAULT_NPC_PROFILE = "/profile_npc.png";
+const DEFAULT_NPC_PROFILE = "profile_npc.png";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
