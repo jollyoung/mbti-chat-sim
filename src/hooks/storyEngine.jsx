@@ -1,248 +1,186 @@
-import { useRef, useState } from "react";
-import { STRINGS } from "../constants/strings.js";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
-import INFP from "../stories/INFP.js";
-import INFJ from "../stories/INFJ.js";
-import INTJ from "../stories/INTJ.js";
-import INTP from "../stories/INTP.js";
-import ISFP from "../stories/ISFP.js";
-import ISFJ from "../stories/ISFJ.js";
-import ISTP from "../stories/ISTP.js";
-import ISTJ from "../stories/ISTJ.js";
+// 시나리오 테이블
+import INFP from "../scenarios/INFP";
+import INFJ from "../scenarios/INFJ";
+import INTJ from "../scenarios/INTJ";
+import ISFP from "../scenarios/ISFP";
+import ESTJ from "../scenarios/ESTJ";
+import ENTP from "../scenarios/ENTP";
+import ENTJ from "../scenarios/ENTJ";
+import ESFP from "../scenarios/ESFP";
+import ENFP from "../scenarios/ENFP";
+import ISFJ from "../scenarios/ISFJ";
+import ISTP from "../scenarios/ISTP";
+import ISTJ from "../scenarios/ISTJ";
 
-import ENFP from "../stories/ENFP.js";
-import ENFJ from "../stories/ENFJ.js";
-import ENTP from "../stories/ENTP.js";
-import ENTJ from "../stories/ENTJ.js";
-
-import ESFP from "../stories/ESFP.js";
-import ESFJ from "../stories/ESFJ.js";
-import ESTP from "../stories/ESTP.js";
-import ESTJ from "../stories/ESTJ.js";
-
-const API_KEY = import.meta.env.VITE_API_KEY;
-
-// MBTI별 시나리오 테이블
-const storyTable = {
-  INFP,
-  INFJ,
-  INTJ,
-  INTP,
-  ISFP,
-  ISFJ,
-  ISTP,
-  ISTJ,
-  ENFP,
-  ENFJ,
-  ENTP,
-  ENTJ,
-  ESFP,
-  ESFJ,
-  ESTP,
-  ESTJ
+// 세션 ID 생성
+const createSessionId = () => {
+  const prefix = "session-";
+  const timestamp = Date.now();
+  const randomPart = Math.random().toString(36).substring(2, 8);
+  return `${prefix}${timestamp}-${randomPart}`;
 };
 
-function delay(ms) {
-  return new Promise((res) => setTimeout(res, ms));
-}
-
-// UUID 생성기
-function createSessionId() {
-  return crypto.randomUUID();
-}
-
-function getChoiceQueue() {
-  return JSON.parse(localStorage.getItem("choiceLogs") || "[]");
-}
-
-function setChoiceQueue(queue) {
-  localStorage.setItem("choiceLogs", JSON.stringify(queue));
-}
-
-export default function useStoryEngine() {
-  const sessionIdRef = useRef(createSessionId());
-  const sessionEndLoggedRef = useRef(false);
-  const abortRef = useRef(false);
-  const stepRef = useRef(0);
-  const lastPendingChoiceRef = useRef(null);
-
-  const [history, setHistory] = useState([]);
+export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
   const [currentScene, setCurrentScene] = useState("intro");
+  const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");
 
-  const clearEngineError = () => setEngineError("");
+  // 🔥 호감도 추가
+  const [affection, setAffection] = useState(0);
 
-  const saveChoiceData = (data) => {
-    const queue = getChoiceQueue();
-    queue.push({ ...data, timestamp: Date.now() });
-    setChoiceQueue(queue);
+  const sessionIdRef = useRef(createSessionId());
+  const stepRef = useRef(0);
+  const abortRef = useRef(false);
+
+  const storyTable = {
+    INFP,
+    INFJ,
+    INTJ,
+    ISFP,
+    ESTJ,
+    ENTP,
+    ENTJ,
+    ESFP,
+    ENFP,
+    ISFJ,
+    ISTP,
+    ISTJ,
   };
 
-  const sendChoicePayload = async (payload) => {
-    const response = await fetch("/api/logChoice", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(API_KEY ? { "x-api-key": API_KEY } : {}),
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to log choice: ${response.status}`);
-    }
-  };
-
-  const flushChoiceQueue = async () => {
-    const queued = getChoiceQueue();
-    if (!queued.length) return;
-
-    const remaining = [...queued];
-    for (const entry of queued) {
-      await sendChoicePayload(entry);
-      remaining.shift();
-      setChoiceQueue(remaining);
+  const logMessage = async (data) => {
+    try {
+      await axios.post("/api/logMessage", data);
+    } catch (err) {
+      console.warn("로그 전송 실패:", err.message);
     }
   };
 
   const logSessionEnd = async () => {
-    if (sessionEndLoggedRef.current) return;
-
     try {
-      const response = await fetch("/api/logSessionEnd", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(API_KEY ? { "x-api-key": API_KEY } : {}),
-        },
-        body: JSON.stringify({
-          sessionId: sessionIdRef.current,
-          mbti: currentMBTI,
-        }),
+      await axios.post("/api/logSession", {
+        sessionId: sessionIdRef.current,
       });
-
-      if (!response.ok) {
-        throw new Error(`Failed to log session end: ${response.status}`);
-      }
-
-      sessionEndLoggedRef.current = true;
-    } catch (error) {
-      setEngineError(STRINGS.sessionEndLogError);
+    } catch (err) {
+      console.warn("세션 종료 로그 실패:", err.message);
     }
   };
 
-  /** 🔥 시나리오 시작 */
-  const start = (mbti) => {
-    const scenario = storyTable[mbti];
-    if (!scenario) return;
-
-    abortRef.current = false;
-    sessionEndLoggedRef.current = false;
-    setEngineError("");
-
-    setCurrentMBTI(mbti);
-    setCurrentScenario(scenario);
-    setHistory([]);
-    setPendingChoice(null);
-    setCurrentScene("intro");
-    setIsEnding(false);
-
-    // 세션 리셋
-    sessionIdRef.current = createSessionId();
-    stepRef.current = 0;
-
-    runScene(scenario, "intro");
-  };
-
-  /** 🔥 씬 실행 (NPC 메시지 + 선택지 지연 출력) */
   const runScene = async (scenario, sceneName) => {
-    const activeSessionId = sessionIdRef.current;
-    const scene = scenario?.[sceneName];
-    if (!scene || abortRef.current) return;
+    if (!scenario || !scenario[sceneName]) {
+      setEngineError(`시나리오에서 '${sceneName}' 찾을 수 없습니다.`);
+      return;
+    }
 
-    for (const item of scene) {
-      if (abortRef.current || sessionIdRef.current !== activeSessionId) return;
+    const sceneArr = scenario[sceneName];
 
-      // 💬 NPC 대사 출력 (800ms 딜레이)
+    for (const item of sceneArr) {
+      if (abortRef.current) return;
+
+      /** NPC 대사 */
       if (item.role === "npc") {
-        await delay(800);
-        if (abortRef.current || sessionIdRef.current !== activeSessionId) return;
-        setHistory((prev) => [...prev, { role: "npc", text: item.text }]);
+        setHistory((prev) => [...prev, item]);
       }
 
-      // END 이벤트 처리
+      /** 엔딩 처리 */
       if (item.type === "end") {
-        await delay(1000);
-        if (abortRef.current || sessionIdRef.current !== activeSessionId) return;
         await logSessionEnd();
-        if (abortRef.current || sessionIdRef.current !== activeSessionId) return;
-        setIsEnding(true);
+        if (!abortRef.current && sessionIdRef.current) {
+          setIsEnding(true);
+        }
         return;
       }
 
-      // ❗ 선택지 출력 (각 메시지 이후 800ms 후 등장)
+      /** 선택지 표시 */
       if (item.type === "choice") {
-        await delay(800);
-        if (abortRef.current || sessionIdRef.current !== activeSessionId) return;
-        const choicePayload = {
-          question: item.question,
-          options: item.options,
-        };
-        lastPendingChoiceRef.current = choicePayload;
-        setPendingChoice(choicePayload);
+        setPendingChoice(item);
+        return;
       }
     }
   };
 
   const choose = async (option) => {
     if (abortRef.current) return;
+
     const activeSessionId = sessionIdRef.current;
-
     setPendingChoice(null);
-    setHistory((prev) => [...prev, { role: "user", text: option.label }]);
 
-    // 🔥 step 증가
-    const nextStep = stepRef.current + 1;
-    stepRef.current = nextStep;
+    // 유저 메시지 표시
+    setHistory((prev) => [
+      ...prev,
+      { role: "user", text: option.label || "선택" },
+    ]);
 
-    const payload = {
-      sessionId: sessionIdRef.current,
-      step: nextStep,
-      mbti: currentMBTI,
-      scene: currentScene,
-      userChoice: option.label,
-      tone: option.tone || null,
-      emotion: option.emotion || null,
-      comm: option.comm || null,
-    };
+    // 로그 저장(선택지)
+    stepRef.current += 1;
+    logMessage({
+      sessionId: activeSessionId,
+      step: stepRef.current,
+      role: "user",
+      text: option.label,
+      next: option.next,
+    });
 
-    try {
-      await flushChoiceQueue();
-      await sendChoicePayload(payload);
-    } catch (error) {
-      saveChoiceData(payload);
-      setPendingChoice(lastPendingChoiceRef.current);
-      setEngineError(STRINGS.choiceSubmitError);
+    // 🔥 affection 갱신
+    let updatedAffection = affection;
+    if (typeof option.affection === "number") {
+      updatedAffection = affection + option.affection;
+      setAffection((prev) => prev + option.affection);
+    }
+
+    /** 멀티 엔딩 분기 */
+    if (option.next === "CHECK_END") {
+      let targetScene = "end_D";
+
+      if (updatedAffection >= 10) targetScene = "end_A";
+      else if (updatedAffection >= 5) targetScene = "end_B";
+      else if (updatedAffection >= 1) targetScene = "end_C";
+
+      if (!abortRef.current && sessionIdRef.current === activeSessionId) {
+        setCurrentScene(targetScene);
+        runScene(currentScenario, targetScene);
+      }
       return;
     }
 
-    // 🔥 다음 씬으로 이동
+    /** 즉시 END */
     if (option.next === "END") {
       await logSessionEnd();
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setIsEnding(true);
       }
       return;
-    } else if (option.next) {
+    }
+
+    /** 일반적 Next 스토리 이동 */
+    if (option.next) {
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setCurrentScene(option.next);
         runScene(currentScenario, option.next);
       }
     }
+  };
+
+  const start = async (mbti) => {
+    setCurrentScene("intro");
+    setHistory([]);
+    setPendingChoice(null);
+    setCurrentMBTI(mbti);
+    setAffection(0); // 초기화 🔥
+
+    setIsEnding(false);
+
+    const scenario = storyTable[mbti];
+    setCurrentScenario(scenario);
+
+    abortRef.current = false;
+    runScene(scenario, "intro");
   };
 
   const reset = () => {
@@ -254,6 +192,8 @@ export default function useStoryEngine() {
     setCurrentMBTI(null);
     setIsEnding(false);
     setEngineError("");
+    setAffection(0); // 초기화 🔥
+
     sessionIdRef.current = createSessionId();
     stepRef.current = 0;
   };
@@ -261,11 +201,12 @@ export default function useStoryEngine() {
   return {
     history,
     pendingChoice,
+    currentScene,
+    currentMBTI,
+    isEnding,
+    engineError,
     start,
     choose,
-    isEnding,
     reset,
-    engineError,
-    clearEngineError,
   };
 }
