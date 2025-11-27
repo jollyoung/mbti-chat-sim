@@ -54,23 +54,23 @@ export function useStoryEngine() {
     ISTJ,
   };
 
-  const logMessage = async (data) => {
-    try {
-      await axios.post("/api/logMessage", data);
-    } catch (err) {
-      console.warn("로그 전송 실패:", err.message);
-    }
-  };
+  // const logMessage = async (data) => {
+  //   try {
+  //     await axios.post("/api/logMessage", data);
+  //   } catch (err) {
+  //     console.warn("로그 전송 실패:", err.message);
+  //   }
+  // };
 
-  const logSessionEnd = async () => {
-    try {
-      await axios.post("/api/logSession", {
-        sessionId: sessionIdRef.current,
-      });
-    } catch (err) {
-      console.warn("세션 종료 로그 실패:", err.message);
-    }
-  };
+  // const logSessionEnd = async () => {
+  //   try {
+  //     await axios.post("/api/logSession", {
+  //       sessionId: sessionIdRef.current,
+  //     });
+  //   } catch (err) {
+  //     console.warn("세션 종료 로그 실패:", err.message);
+  //   }
+  // };
 
   const runScene = async (scenario, sceneName) => {
     if (!scenario || !scenario[sceneName]) {
@@ -85,6 +85,7 @@ export function useStoryEngine() {
 
       /** NPC 대사 */
       if (item.role === "npc") {
+        await new Promise((resolve) => setTimeout(resolve, 600)); 
         setHistory((prev) => [...prev, item]);
       }
 
@@ -99,6 +100,7 @@ export function useStoryEngine() {
 
       /** 선택지 표시 */
       if (item.type === "choice") {
+        await new Promise((resolve) => setTimeout(resolve, 600)); 
         setPendingChoice(item);
         return;
       }
