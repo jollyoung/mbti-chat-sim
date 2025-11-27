@@ -15,8 +15,8 @@ const MBTI_PROFILE_MAP = {
   ISTP: "/public/basic_profile.jpg",
 
   // 반려동물 그룹
-  INFP: "/public/pet_profile.png",
-  ISFJ: "/public/pet_profile.png",
+  INFP: "/public/basic_profile.png",
+  ISFJ: "/public/basic_profile.png",
 
   // 감성 사진 그룹
   INFJ: "/public/mood_profile.png",
