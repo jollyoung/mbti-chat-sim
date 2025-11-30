@@ -121,12 +121,16 @@ export function useStoryEngine() {
 
     // 로그 저장(선택지)
     stepRef.current += 1;
-    logMessage({
+    await axios.post("/api/logChoice", {
       sessionId: activeSessionId,
       step: stepRef.current,
-      role: "user",
-      text: option.label,
-      next: option.next,
+      mbti: currentMBTI,
+      scene: currentScene,
+      userChoice: option.label,
+      tone: option.tone || "",
+      emotion: option.emotion || "",
+      comm: option.comm || "",
+      timestamp: Date.now(),
     });
 
     // 🔥 affection 갱신
@@ -144,6 +148,12 @@ export function useStoryEngine() {
       else if (updatedAffection >= 5) targetScene = "end_B";
       else if (updatedAffection >= 1) targetScene = "end_C";
 
+      await axios.post("/api/logSession", {
+        sessionId: activeSessionId,
+        mbti: currentMBTI,
+        endedAt: Date.now(),
+      });
+
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setCurrentScene(targetScene);
         runScene(currentScenario, targetScene);
@@ -153,7 +163,12 @@ export function useStoryEngine() {
 
     /** 즉시 END */
     if (option.next === "END") {
-      await logSessionEnd();
+      await axios.post("/api/logSession", {
+        sessionId: activeSessionId,
+        mbti: currentMBTI,
+        endedAt: Date.now(),
+      });
+
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setIsEnding(true);
       }
@@ -168,6 +183,7 @@ export function useStoryEngine() {
       }
     }
   };
+
 
   const start = async (mbti) => {
     setCurrentScene("intro");
