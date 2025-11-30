@@ -31,6 +31,7 @@ export function useStoryEngine() {
   const [currentMBTI, setCurrentMBTI] = useState(null);
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");
+  const mbtiRef = useRef(null);
 
   // 🔥 호감도 추가
   const [affection, setAffection] = useState(0);
@@ -150,9 +151,10 @@ export function useStoryEngine() {
 
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
-        mbti: currentMBTI,
+        mbti: mbtiRef.current,
         endedAt: Date.now(),
       });
+
 
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setCurrentScene(targetScene);
@@ -189,6 +191,7 @@ export function useStoryEngine() {
     setCurrentScene("intro");
     setHistory([]);
     setPendingChoice(null);
+    mbtiRef.current = mbti;
     setCurrentMBTI(mbti);
     setAffection(0); // 초기화 🔥
 
