@@ -149,6 +149,12 @@ export function useStoryEngine() {
       else if (updatedAffection >= 5) targetScene = "end_B";
       else if (updatedAffection >= 1) targetScene = "end_C";
 
+      console.log("ENDING LOG PAYLOAD", {
+        sessionId: activeSessionId,
+        mbti: mbtiRef.current,
+        endedAt: Date.now(),
+      });
+
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
         mbti: mbtiRef.current,
@@ -165,6 +171,12 @@ export function useStoryEngine() {
 
     /** 즉시 END */
     if (option.next === "END") {
+      console.log("ENDING LOG PAYLOAD", {
+        sessionId: activeSessionId,
+        mbti: mbtiRef.current,
+        endedAt: Date.now(),
+      });
+
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
         mbti: mbtiRef.current,
