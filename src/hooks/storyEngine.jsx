@@ -87,7 +87,7 @@ export function useStoryEngine() {
 
       /** NPC 대사 */
       if (item.role === "npc") {
-        await new Promise((resolve) => setTimeout(resolve, 600)); 
+        await new Promise((resolve) => setTimeout(resolve, 3000)); 
         setHistory((prev) => [...prev, item]);
       }
 
