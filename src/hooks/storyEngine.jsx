@@ -93,7 +93,6 @@ export function useStoryEngine() {
 
       /** 엔딩 처리 */
       if (item.type === "end") {
-        await new Promise((resolve) => setTimeout(resolve, 600));
         setHistory(prev => [...prev, item]);  // 엔딩 대사 출력
 
         if (!abortRef.current && sessionIdRef.current) {
