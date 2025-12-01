@@ -136,8 +136,8 @@ export function useStoryEngine() {
       emotion: option.emotion || "",
       comm: option.comm || "",
       timestamp: Date.now(),
-      sex: userInfo?.sex || "", 
-      age: userInfo?.age || "",
+      sex: userInfoRef.current?.sex || "",   // ← 수정!
+      age: userInfoRef.current?.age || "",   // ← 수정!
       affection: updatedAffection,
     });
 
@@ -165,6 +165,9 @@ export function useStoryEngine() {
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
         mbti: mbtiRef.current,
+        sex: userInfoRef.current?.sex || "",
+        age: userInfoRef.current?.age || "",
+        affection,
         endedAt: Date.now(),
       });
 
@@ -209,7 +212,7 @@ export function useStoryEngine() {
     setCurrentMBTI(mbti);
     setAffection(0); // 초기화 🔥
 
-    userInfoRef.current = info;
+    userInfoRef.current = userInfo;
 
     setIsEnding(false);
 
