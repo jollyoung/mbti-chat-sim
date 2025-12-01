@@ -29,7 +29,6 @@ export function useStoryEngine() {
   const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
   const userInfoRef = useRef(null);
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");

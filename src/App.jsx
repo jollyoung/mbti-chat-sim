@@ -85,7 +85,7 @@ function App() {
     }
 
     setUserInfo({ sex, age, mbti, npcProfile });
-    start(mbti);
+    start(mbti, { sex, age, mbti, npcProfile });
   };
 
   return (
