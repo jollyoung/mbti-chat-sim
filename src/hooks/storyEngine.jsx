@@ -96,7 +96,7 @@ export function useStoryEngine() {
           setHistory(prev => [...prev, item]);  // 엔딩 대사 출력
           setTimeout(() => {
             setIsEnding(true); // 👉 마지막 출력 후 엔딩 페이지로
-          }, 1500);
+          }, 4000);
         }
         return;
       }
