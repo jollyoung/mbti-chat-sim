@@ -167,7 +167,7 @@ export function useStoryEngine() {
     if (option.next === "END") {
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
-        mbti: currentMBTI,
+        mbti: mbtiRef.current,
         endedAt: Date.now(),
       });
 
