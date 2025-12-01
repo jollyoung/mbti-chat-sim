@@ -188,6 +188,7 @@ function App() {
           <ChatContainer
             messages={history}
             npcProfile={userInfo.npcProfile}
+            currentLocation={currentLocation}
           />
 
           {pendingChoice && (

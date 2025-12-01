@@ -32,6 +32,7 @@ export function useStoryEngine() {
   const userInfoRef = useRef(null);
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");
+  const [currentLocation, setCurrentLocation] = useState("default");
   const mbtiRef = useRef(null);
 
   // 🔥 호감도 추가
@@ -87,6 +88,11 @@ export function useStoryEngine() {
 
       /** NPC 대사 */
       if (item.role === "npc") {
+
+        if (item.location) {
+          setCurrentLocation(item.location);
+        }
+
         await new Promise((resolve) => setTimeout(resolve, 600)); 
         setHistory((prev) => [...prev, item]);
       }
@@ -105,6 +111,11 @@ export function useStoryEngine() {
 
       /** 선택지 표시 */
       if (item.type === "choice") {
+
+        if (item.location) {
+          setCurrentLocation(item.location);
+        }
+
         await new Promise((resolve) => setTimeout(resolve, 600));
         setPendingChoice(item);
         return;
@@ -241,6 +252,7 @@ export function useStoryEngine() {
     pendingChoice,
     currentScene,
     currentMBTI,
+    currentLocation,
     isEnding,
     engineError,
     start,
