@@ -31,18 +31,16 @@ export function validateChoicePayload(body = {}) {
   };
 }
 
-export function validateSessionEndPayload(body = {}) {
-  const { sessionId, mbti } = body;
-
-  if (!sessionId || !mbti) {
-    return { error: "sessionId and mbti are required." };
+export function validateSessionEndPayload(data) {
+  if (!data.sessionId) {
+    return { error: "sessionId required" };
   }
-
-  return {
-    data: {
-      sessionId,
-      mbti,
-      endedAt: Date.now()
-    }
-  };
+  if (!data.mbti) {
+    return { error: "mbti required" };
+  }
+  if (!data.endedAt) {
+    return { error: "endedAt required" };
+  }
+  return { data };
 }
+
