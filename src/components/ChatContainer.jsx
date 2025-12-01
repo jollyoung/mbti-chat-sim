@@ -19,7 +19,7 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
 
 
   return (
-    <div className="chat-wrapper" style={{ backgroundColor: bgColor }}>
+    <div className="chat-wrapper" >
       <div className="chat-header">
         <img src={npcProfile} className="npc-avatar" />
         <div className="npc-info">
@@ -27,7 +27,7 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
         </div>
       </div>
 
-      <div className="chat-body">
+      <div className="chat-body" style={{ backgroundColor: bgColor }}>
         {messages.map((msg, i) => (
           <ChatBubble
             key={i}
