@@ -92,7 +92,6 @@ export function useStoryEngine() {
 
       /** 엔딩 처리 */
       if (item.type === "end") {
-        await logSessionEnd();
         if (!abortRef.current && sessionIdRef.current) {
           setIsEnding(true);
         }
