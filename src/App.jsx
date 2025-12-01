@@ -54,6 +54,7 @@ function App() {
     reset,
     engineError,
     clearEngineError,
+    currentLocation,
   } = useStoryEngine();
 
   const handleStart = (e) => {
