@@ -91,6 +91,9 @@ export default async function handler(req, res) {
         data.emotion,
         data.comm,
         new Date(data.timestamp).toISOString(),
+        data.sex || "",
+        data.age || "",
+        typeof data.affection === "number" ? data.affection : "",
       ]],
     });
 

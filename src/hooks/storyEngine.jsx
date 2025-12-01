@@ -29,6 +29,8 @@ export function useStoryEngine() {
   const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+  const userInfoRef = useRef(null);
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");
   const mbtiRef = useRef(null);
@@ -94,7 +96,7 @@ export function useStoryEngine() {
       if (item.type === "end") {
         await new Promise((resolve) => setTimeout(resolve, 600));
         setHistory(prev => [...prev, item]);  // 엔딩 대사 출력
-        
+
         if (!abortRef.current && sessionIdRef.current) {
           setTimeout(() => {
             setIsEnding(true); // 👉 마지막 출력 후 엔딩 페이지로
@@ -105,7 +107,6 @@ export function useStoryEngine() {
 
       /** 선택지 표시 */
       if (item.type === "choice") {
-        await new Promise((resolve) => setTimeout(resolve, 600)); 
         setPendingChoice(item);
         return;
       }
@@ -136,6 +137,9 @@ export function useStoryEngine() {
       emotion: option.emotion || "",
       comm: option.comm || "",
       timestamp: Date.now(),
+      sex: userInfo?.sex || "", 
+      age: userInfo?.age || "",
+      affection: updatedAffection,
     });
 
     // 🔥 affection 갱신
@@ -198,13 +202,15 @@ export function useStoryEngine() {
   };
 
 
-  const start = async (mbti) => {
+  const start = async (mbti, userInfo) => {
     setCurrentScene("intro");
     setHistory([]);
     setPendingChoice(null);
     mbtiRef.current = mbti;
     setCurrentMBTI(mbti);
     setAffection(0); // 초기화 🔥
+
+    userInfoRef.current = info;
 
     setIsEnding(false);
 
