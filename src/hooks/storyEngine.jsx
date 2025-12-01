@@ -93,7 +93,10 @@ export function useStoryEngine() {
       /** 엔딩 처리 */
       if (item.type === "end") {
         if (!abortRef.current && sessionIdRef.current) {
-          setIsEnding(true);
+          setHistory(prev => [...prev, item]);  // 엔딩 대사 출력
+          setTimeout(() => {
+            setIsEnding(true); // 👉 마지막 출력 후 엔딩 페이지로
+          }, 500);
         }
         return;
       }
@@ -170,12 +173,6 @@ export function useStoryEngine() {
 
     /** 즉시 END */
     if (option.next === "END") {
-      console.log("ENDING LOG PAYLOAD", {
-        sessionId: activeSessionId,
-        mbti: mbtiRef.current,
-        endedAt: Date.now(),
-      });
-
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
         mbti: mbtiRef.current,
@@ -183,7 +180,8 @@ export function useStoryEngine() {
       });
 
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
-        setIsEnding(true);
+        setCurrentScene("end_D"); // or target ending scene
+        runScene(currentScenario, "end_D");
       }
       return;
     }
