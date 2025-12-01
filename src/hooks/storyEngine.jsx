@@ -138,7 +138,6 @@ export function useStoryEngine() {
       timestamp: Date.now(),
       sex: userInfoRef.current?.sex || "",   // ← 수정!
       age: userInfoRef.current?.age || "",   // ← 수정!
-      affection: updatedAffection,
     });
 
     // 🔥 affection 갱신
@@ -167,7 +166,6 @@ export function useStoryEngine() {
         mbti: mbtiRef.current,
         sex: userInfoRef.current?.sex || "",
         age: userInfoRef.current?.age || "",
-        affection,
         endedAt: Date.now(),
       });
 
