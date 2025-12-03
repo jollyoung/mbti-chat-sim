@@ -27,7 +27,12 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
         </div>
       </div>
 
-      <div className="chat-body" style={{ backgroundColor: bgColor }}>
+      <div className={`chat-wrapper ${
+        currentLocation === "cafe" ? "cafe-bg" :
+        currentLocation === "street" ? "street-bg" :
+        currentLocation === "home" ? "home-bg" :
+        "default-bg"
+      }`}>
         {messages.map((msg, i) => (
           <ChatBubble
             key={i}
