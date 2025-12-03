@@ -5,8 +5,8 @@ const INFP = {
   [SCENE.CONTACT_DECISION]: [
     {
       type: "choice",
-      question: "먼저 연락해볼까요?",
       location: LOCATION.DEFAULT,
+      question: "먼저 연락해볼까요?",
       options: [
         {
           label: "먼저 인사해보기",
@@ -27,13 +27,12 @@ const INFP = {
   [SCENE.CONTACT_START]: [
     {
       role: "npc",
-      text: "안녕하세요! 소개받아서 연락드렸어요 :)",
       location: LOCATION.DEFAULT,
+      text: "안녕하세요! 소개받아서 연락드렸어요 :)",
     },
     {
       type: "choice",
       question: "답장을 보내볼까요?",
-      location: LOCATION.DEFAULT,
       options: [
         {
           label: "안녕하세요! 반가워요!",
@@ -60,44 +59,41 @@ const INFP = {
   [SCENE.MEETING_PLAN]: [
     {
       role: "npc",
-      text: "혹시 이번 주에 한 번 뵐까요?",
       location: LOCATION.DEFAULT,
+      text: "혹시 이번 주에 한 번 뵐까요?",
     },
     {
       type: "choice",
       question: "어디가 편하신가요?",
-      location: LOCATION.DEFAULT,
       options: [
         {
           label: "카페에서 차 한 잔 어떠세요?",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_PREP_CAFE,
           tone: "Warm",
-          intent: "Supportive",
-          location: LOCATION.CAFE
+          intent: "Supportive"
         },
         {
           label: "산책하면서 얘기해도 좋을 것 같아요!",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_PREP_STREET,
           tone: "Neutral",
-          intent: "Probing",
-          location: LOCATION.STREET
+          intent: "Probing"
         },
         {
           label: "편하신 데 알려주시면 맞출게요!",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_PREP_CAFE,
           tone: "Warm",
-          intent: "Supportive",
-          location: LOCATION.CAFE
+          intent: "Supportive"
         }
       ]
     }
   ],
 
-  [SCENE.FIRST_MEET_PREP]: [
+  // 🏡 장소 분기 된 scene들
+  [SCENE.FIRST_MEET_PREP_CAFE]: [
     {
       role: "npc",
+      location: LOCATION.CAFE,
       text: "저 여기 도착했어요! 혹시 어디 계세요?",
-      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
@@ -125,11 +121,43 @@ const INFP = {
     }
   ],
 
+  [SCENE.FIRST_MEET_PREP_STREET]: [
+    {
+      role: "npc",
+      location: LOCATION.STREET,
+      text: "저 여기 도착했어요! 혹시 어디 계세요?",
+    },
+    {
+      type: "choice",
+      question: "어떻게 응대할까요?",
+      options: [
+        {
+          label: "저도 방금 도착했어요! 바로 찾아갈게요 :)",
+          next: SCENE.FIRST_CHAT,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "혹시 어디 계신가요?",
+          next: SCENE.FIRST_CHAT,
+          tone: "Neutral",
+          intent: "Probing"
+        },
+        {
+          label: "잠시만요. 금방 갈게요.",
+          next: SCENE.FIRST_CHAT,
+          tone: "Dry",
+          intent: "Self-disclosure"
+        }
+      ]
+    }
+  ],
+
   [SCENE.FIRST_CHAT]: [
     {
       role: "npc",
-      text: "생각보다 편안한 분위기네요. 만나 뵙게 돼서 반가워요!",
       location: LOCATION.DEFAULT,
+      text: "생각보다 편안한 분위기네요. 만나 뵙게 돼서 반가워요!",
     },
     {
       type: "choice",
@@ -160,8 +188,8 @@ const INFP = {
   [SCENE.INTEREST_DISCUSSION]: [
     {
       role: "npc",
-      text: "혹시 좋아하시는 것 있나요? 취미 같은 거요!",
       location: LOCATION.DEFAULT,
+      text: "혹시 좋아하시는 것 있나요? 취미 같은 거요!",
     },
     {
       type: "choice",
@@ -192,8 +220,8 @@ const INFP = {
   [SCENE.VALUE_TALK]: [
     {
       role: "npc",
-      text: "좋아요! 그런 취향 멋져요. 저는 가끔 스스로 생각 정리하는 걸 좋아해요.",
       location: LOCATION.DEFAULT,
+      text: "좋아요! 그런 취향 멋져요. 저는 가끔 스스로 생각 정리하는 걸 좋아해요.",
     },
     {
       type: "choice",
