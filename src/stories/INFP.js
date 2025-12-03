@@ -68,19 +68,19 @@ const INFP = {
       options: [
         {
           label: "카페에서 차 한 잔 어떠세요?",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_CAFE,
           tone: "Warm",
           intent: "Supportive"
         },
         {
           label: "산책하면서 얘기해도 좋을 것 같아요!",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_STREET,
           tone: "Neutral",
           intent: "Probing"
         },
         {
           label: "편하신 데 알려주시면 맞출게요!",
-          next: SCENE.FIRST_MEET_PREP,
+          next: SCENE.FIRST_MEET_CAFE,
           tone: "Warm",
           intent: "Supportive"
         }
@@ -89,7 +89,7 @@ const INFP = {
   ],
 
   // 🏡 장소 분기 된 scene들
-  [SCENE.FIRST_MEET_PREP]: [
+  [SCENE.FIRST_MEET_CAFE]: [
     {
       role: "npc",
       location: LOCATION.CAFE,
@@ -121,7 +121,7 @@ const INFP = {
     }
   ],
 
-  [SCENE.FIRST_MEET_PREP]: [
+  [SCENE.FIRST_MEET_STREET]: [
     {
       role: "npc",
       location: LOCATION.STREET,
