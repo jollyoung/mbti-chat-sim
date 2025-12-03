@@ -116,7 +116,7 @@ export function useStoryEngine() {
       if (item.type === "choice") {
         await new Promise((resolve) => setTimeout(resolve, 600));
         setPendingChoice(item);
-        return;
+        continue;
       }
     }
   };
