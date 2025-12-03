@@ -89,7 +89,7 @@ const INFP = {
   ],
 
   // 🏡 장소 분기 된 scene들
-  [SCENE.FIRST_MEET_PREP_CAFE]: [
+  [SCENE.FIRST_MEET_PREP]: [
     {
       role: "npc",
       location: LOCATION.CAFE,
@@ -121,7 +121,7 @@ const INFP = {
     }
   ],
 
-  [SCENE.FIRST_MEET_PREP_STREET]: [
+  [SCENE.FIRST_MEET_PREP]: [
     {
       role: "npc",
       location: LOCATION.STREET,
