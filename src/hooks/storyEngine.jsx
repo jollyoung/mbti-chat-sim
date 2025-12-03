@@ -85,6 +85,8 @@ export function useStoryEngine() {
 
     const sceneArr = scenario[sceneName];
 
+    const sceneLocation = sceneArr[0]?.location;
+
     if (sceneLocation) {
       setCurrentLocation(sceneLocation);
     }
