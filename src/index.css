@@ -512,19 +512,19 @@
 }
 
 .chat-wrapper.cafe-bg {
-  background-image: url("/images/bg_cafe.jpg");
+  background-image: url("/public/bg_cafe.jpg");
   background-size: cover;
   background-position: center;
 }
 
 .chat-wrapper.street-bg {
-  background-image: url("/images/bg_street.jpg");
+  background-image: url("/public/bg_cafe.jpg");
   background-size: cover;
   background-position: center;
 }
 
 .chat-wrapper.home-bg {
-  background-image: url("/images/bg_home.jpg");
+  background-image: url("/public/bg_cafe.jpg");
   background-size: cover;
   background-position: center;
 }
