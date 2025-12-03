@@ -8,18 +8,17 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-  
-  const locationStyles = {
-    default: "#efefef",
-    cafe: "#d8c4a0",
-    home: "#cfd8ff",
-  };
-
-  const bgColor = locationStyles[currentLocation] || locationStyles.default;
-
 
   return (
-    <div className="chat-wrapper" >
+    <div className={`chat-wrapper ${
+      currentLocation === "cafe"
+        ? "cafe-bg"
+        : currentLocation === "street"
+        ? "street-bg"
+        : currentLocation === "home"
+        ? "home-bg"
+        : "default-bg"
+    }`}>
       <div className="chat-header">
         <img src={npcProfile} className="npc-avatar" />
         <div className="npc-info">
@@ -27,12 +26,7 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
         </div>
       </div>
 
-      <div className={`chat-wrapper ${
-        currentLocation === "cafe" ? "cafe-bg" :
-        currentLocation === "street" ? "street-bg" :
-        currentLocation === "home" ? "home-bg" :
-        "default-bg"
-      }`}>
+      <div className="chat-body">
         {messages.map((msg, i) => (
           <ChatBubble
             key={i}
