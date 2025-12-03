@@ -13,15 +13,6 @@
   padding: 20px;
 }
 
-/* 제목 */
-.intro-title {
-  font-size: 26px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
 /* 폼 카드 */
 .intro-card,
 .info-form-card {
@@ -114,22 +105,6 @@
 
 .start-btn:active {
   transform: translateY(0);
-}
-
-/* 부드러운 등장 애니메이션 */
-.animate-fadeup {
-  animation: fadeUp 0.5s ease-out;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ------------------------------ */
