@@ -1,109 +1,224 @@
+import { SCENE } from "../constants/sceneIDs";
+import { LOCATION } from "../constants/locations";
+
 const INFP = {
-  intro: [
+  [SCENE.CONTACT_DECISION]: [
+    {
+      type: "choice",
+      question: "먼저 연락해볼까요?",
+      location: LOCATION.DEFAULT,
+      options: [
+        {
+          label: "먼저 인사해보기",
+          next: SCENE.CONTACT_START,
+          tone: "Neutral",
+          intent: "Self-disclosure"
+        },
+        {
+          label: "상대가 먼저 연락오길 기다리기",
+          next: SCENE.CONTACT_START,
+          tone: "Neutral",
+          intent: "Probing"
+        }
+      ]
+    }
+  ],
+
+  [SCENE.CONTACT_START]: [
     {
       role: "npc",
-      text: "안녕하세요! 소개받고 연락드렸어요. 지금 잠깐 괜찮으세요?",
-      location: "default"
+      text: "안녕하세요! 소개받아서 연락드렸어요 :)",
+      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
       question: "답장을 보내볼까요?",
-      location: "default",
+      location: LOCATION.DEFAULT,
       options: [
-        { label: "네, 시간 괜찮아요!", next: "scene_2" },
-        { label: "조금 바쁘긴 한데, 말씀해보세요!", next: "scene_2" },
-        { label: "천천히 괜찮아요 :)", next: "scene_2" }
+        {
+          label: "안녕하세요! 반가워요!",
+          next: SCENE.MEETING_PLAN,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "소개받게 된 이유가 궁금하네요!",
+          next: SCENE.MEETING_PLAN,
+          tone: "Neutral",
+          intent: "Probing"
+        },
+        {
+          label: "오늘 일정 괜찮으세요?",
+          next: SCENE.MEETING_PLAN,
+          tone: "Dry",
+          intent: "Probing"
+        }
       ]
     }
   ],
 
-  scene_2: [
+  [SCENE.MEETING_PLAN]: [
     {
       role: "npc",
-      text: "오늘 하루는 어떠셨어요? 저는 정신 없었는데, 이렇게 얘기하니까 좀 풀리는 느낌이에요.",
-      location: "default"
+      text: "혹시 이번 주에 한 번 뵐까요?",
+      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
-      question: "어떤 대답을 할까요?",
-      location: "default",
+      question: "어디가 편하신가요?",
+      location: LOCATION.DEFAULT,
       options: [
-        { label: "바빴지만 괜찮았어요!", next: "scene_3" },
-        { label: "평범했어요.", next: "scene_3" },
-        { label: "조금 피곤했는데… 이렇게 얘기하니 좋네요.", next: "scene_3", affection: +1 }
+        {
+          label: "카페에서 차 한 잔 어떠세요?",
+          next: SCENE.FIRST_MEET_PREP,
+          tone: "Warm",
+          intent: "Supportive",
+          location: LOCATION.CAFE
+        },
+        {
+          label: "산책하면서 얘기해도 좋을 것 같아요!",
+          next: SCENE.FIRST_MEET_PREP,
+          tone: "Neutral",
+          intent: "Probing",
+          location: LOCATION.STREET
+        },
+        {
+          label: "편하신 데 알려주시면 맞출게요!",
+          next: SCENE.FIRST_MEET_PREP,
+          tone: "Warm",
+          intent: "Supportive",
+          location: LOCATION.CAFE
+        }
       ]
     }
   ],
 
-  scene_3: [
+  [SCENE.FIRST_MEET_PREP]: [
     {
       role: "npc",
-      text: "혹시… 커피 한 잔 하실래요? 너무 급하면 부담 안 가지셔도 되고요!",
-      location: "cafe"
+      text: "저 여기 도착했어요! 혹시 어디 계세요?",
+      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
-      question: "커피?",
-      location: "cafe",
+      question: "어떻게 응대할까요?",
       options: [
-        { label: "좋아요! 가보죠.", next: "scene_4", affection: +1 },
-        { label: "짧게 한 잔 괜찮아요.", next: "scene_4" },
-        { label: "사주시는 거죠? ㅎㅎ", next: "scene_4", affection: +1 }
+        {
+          label: "저도 방금 도착했어요! 바로 찾아갈게요 :)",
+          next: SCENE.FIRST_CHAT,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "어디에 앉아계세요? 바로 갈게요!",
+          next: SCENE.FIRST_CHAT,
+          tone: "Neutral",
+          intent: "Probing"
+        },
+        {
+          label: "잠시만요. 금방 갈게요.",
+          next: SCENE.FIRST_CHAT,
+          tone: "Dry",
+          intent: "Self-disclosure"
+        }
       ]
     }
   ],
 
-  scene_4: [
+  [SCENE.FIRST_CHAT]: [
     {
       role: "npc",
-      text: "여기 분위기 좋네요. 이런 시간 오랜만이에요.",
-      location: "cafe"
+      text: "생각보다 편안한 분위기네요. 만나 뵙게 돼서 반가워요!",
+      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
-      question: "뭐라고 할까요?",
-      location: "cafe",
+      question: "인사를 이어갑니다",
       options: [
-        { label: "저도 좋아요, 편하네요.", next: "scene_5", affection: +1 },
-        { label: "괜찮은 카페네요.", next: "scene_5" },
-        { label: "잘 초대해주셨어요.", next: "scene_5", affection: +2 }
+        {
+          label: "저도 반가워요! 오늘 날씨도 좋아서 기분이 좋네요",
+          next: SCENE.INTEREST_DISCUSSION,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "생각보다 금방 오셨네요.",
+          next: SCENE.INTEREST_DISCUSSION,
+          tone: "Neutral",
+          intent: "Probing"
+        },
+        {
+          label: "편하게 말씀해주시면 좋을 것 같아요.",
+          next: SCENE.INTEREST_DISCUSSION,
+          tone: "Dry",
+          intent: "Supportive"
+        }
       ]
     }
   ],
 
-  scene_5: [
+  [SCENE.INTEREST_DISCUSSION]: [
     {
       role: "npc",
-      text: "이제 집 가셔야 할 시간 아니에요? 제가 근처까지 같이 걸어드릴까요?",
-      location: "home"
+      text: "혹시 좋아하시는 것 있나요? 취미 같은 거요!",
+      location: LOCATION.DEFAULT,
     },
     {
       type: "choice",
-      question: "마무리 멘트!",
-      location: "home",
+      question: "어떤 취미인지?",
       options: [
-        { label: "같이 가요. 괜찮으시면.", next: "CHECK_END", affection: +2 },
-        { label: "네, 조금만 같이 걸어요!", next: "CHECK_END", affection: +1 },
-        { label: "아 오늘은 괜찮아요! 연락드릴게요 :)", next: "CHECK_END" }
+        {
+          label: "저는 산책하거나 카페 가는 걸 좋아해요! 편해지더라고요",
+          next: SCENE.VALUE_TALK,
+          tone: "Warm",
+          intent: "Self-disclosure"
+        },
+        {
+          label: "요즘은 이것저것 다양하게 해보고 있어요!",
+          next: SCENE.VALUE_TALK,
+          tone: "Neutral",
+          intent: "Self-disclosure"
+        },
+        {
+          label: "아직 취미를 정하지는 못했어요.",
+          next: SCENE.VALUE_TALK,
+          tone: "Dry",
+          intent: "Self-disclosure"
+        }
       ]
     }
   ],
 
-  end_A: [
-    { role: "npc", text: "오늘 편했어요. 다음에 또 봐요!" },
-    { type: "end" }
-  ],
-  end_B: [
-    { role: "npc", text: "좋은 시간 감사해요. 조심히 들어가세요!" },
-    { type: "end" }
-  ],
-  end_C: [
-    { role: "npc", text: "연락은 계속해요 :)" },
-    { type: "end" }
-  ],
-  end_D: [
-    { role: "npc", text: "들어가셔서 쉬세요!" },
-    { type: "end" }
+  [SCENE.VALUE_TALK]: [
+    {
+      role: "npc",
+      text: "좋아요! 그런 취향 멋져요. 저는 가끔 스스로 생각 정리하는 걸 좋아해요.",
+      location: LOCATION.DEFAULT,
+    },
+    {
+      type: "choice",
+      question: "대화를 이어갑니다",
+      options: [
+        {
+          label: "혼자만의 시간도 필요한 것 같아요. 공감돼요!",
+          next: null,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "어떤 생각들을 정리하시나요?",
+          next: null,
+          tone: "Neutral",
+          intent: "Probing"
+        },
+        {
+          label: "저는 사람 만나는 게 더 편한 편이에요.",
+          next: null,
+          tone: "Dry",
+          intent: "Self-disclosure"
+        }
+      ]
+    }
   ]
 };
 

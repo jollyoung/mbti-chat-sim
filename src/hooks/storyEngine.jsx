@@ -83,16 +83,15 @@ export function useStoryEngine() {
 
     const sceneArr = scenario[sceneName];
 
+    if (sceneLocation) {
+      setCurrentLocation(sceneLocation);
+    }
+
     for (const item of sceneArr) {
       if (abortRef.current) return;
 
       /** NPC 대사 */
       if (item.role === "npc") {
-
-        if (item.location) {
-          setCurrentLocation(item.location);
-        }
-
         await new Promise((resolve) => setTimeout(resolve, 600)); 
         setHistory((prev) => [...prev, item]);
       }
