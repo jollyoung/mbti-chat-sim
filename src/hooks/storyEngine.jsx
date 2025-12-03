@@ -25,7 +25,7 @@ const createSessionId = () => {
 
 export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
-  const [currentScene, setCurrentScene] = useState("intro");
+  const [currentScene, setCurrentScene] = useState("SCENE.CONTACT_DECISION");
   const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
@@ -213,7 +213,7 @@ export function useStoryEngine() {
 
 
   const start = async (mbti, userInfo) => {
-    setCurrentScene("intro");
+    setCurrentScene(SCENE.CONTACT_DECISION);
     setHistory([]);
     setPendingChoice(null);
     mbtiRef.current = mbti;
@@ -228,14 +228,14 @@ export function useStoryEngine() {
     setCurrentScenario(scenario);
 
     abortRef.current = false;
-    runScene(scenario, "intro");
+    runScene(scenario, SCENE.CONTACT_DECISION);
   };
 
   const reset = () => {
     abortRef.current = true;
     setHistory([]);
     setCurrentScenario(null);
-    setCurrentScene("intro");
+    setCurrentScene(SCENE.CONTACT_DECISION);
     setPendingChoice(null);
     setCurrentMBTI(null);
     setIsEnding(false);
