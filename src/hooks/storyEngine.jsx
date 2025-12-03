@@ -27,7 +27,7 @@ const createSessionId = () => {
 
 export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
-  const [currentScene, setCurrentScene] = useState("SCENE.CONTACT_DECISION");
+  const [currentScene, setCurrentScene] = useState(SCENE.CONTACT_DECISION);
   const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
@@ -114,11 +114,6 @@ export function useStoryEngine() {
 
       /** 선택지 표시 */
       if (item.type === "choice") {
-
-        if (item.location) {
-          setCurrentLocation(item.location);
-        }
-
         await new Promise((resolve) => setTimeout(resolve, 600));
         setPendingChoice(item);
         return;
@@ -230,6 +225,7 @@ export function useStoryEngine() {
 
     const scenario = storyTable[mbti];
     setCurrentScenario(scenario);
+    setCurrentLocation(LOCATION.DEFAULT);
 
     abortRef.current = false;
     runScene(scenario, SCENE.CONTACT_DECISION);
@@ -242,6 +238,7 @@ export function useStoryEngine() {
     setCurrentScene(SCENE.CONTACT_DECISION);
     setPendingChoice(null);
     setCurrentMBTI(null);
+    setCurrentLocation(LOCATION.DEFAULT);
     setIsEnding(false);
     setEngineError("");
     setAffection(0); // 초기화 🔥
