@@ -68,19 +68,19 @@ const INFP = {
       options: [
         {
           label: "카페에서 차 한 잔 어떠세요?",
-          next: SCENE.FIRST_MEET_PREP_CAFE,
+          next: SCENE.FIRST_MEET_PREP,
           tone: "Warm",
           intent: "Supportive"
         },
         {
           label: "산책하면서 얘기해도 좋을 것 같아요!",
-          next: SCENE.FIRST_MEET_PREP_STREET,
+          next: SCENE.FIRST_MEET_PREP,
           tone: "Neutral",
           intent: "Probing"
         },
         {
           label: "편하신 데 알려주시면 맞출게요!",
-          next: SCENE.FIRST_MEET_PREP_CAFE,
+          next: SCENE.FIRST_MEET_PREP,
           tone: "Warm",
           intent: "Supportive"
         }
