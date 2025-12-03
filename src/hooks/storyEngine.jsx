@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { SCENE } from "../constants/sceneIDs";
+import { LOCATION } from "../constants/locations";
 
 // 시나리오 테이블
 import INFP from "../stories/INFP";
