@@ -59,24 +59,6 @@ export function useStoryEngine() {
     ISTJ,
   };
 
-  const logMessage = async (data) => {
-    try {
-      await axios.post("/api/logMessage", data);
-    } catch (err) {
-      console.warn("로그 전송 실패:", err.message);
-    }
-  };
-
-  const logSessionEnd = async () => {
-    try {
-      await axios.post("/api/logSession", {
-        sessionId: sessionIdRef.current,
-      });
-    } catch (err) {
-      console.warn("세션 종료 로그 실패:", err.message);
-    }
-  };
-
   const runScene = async (scenario, sceneName) => {
     if (!scenario || !scenario[sceneName]) {
       setEngineError(`시나리오에서 '${sceneName}' 찾을 수 없습니다.`);
