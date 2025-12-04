@@ -156,34 +156,97 @@ const INFP = {
   [SCENE.FIRST_CHAT]: [
     {
       role: "npc",
-      location: LOCATION.DEFAULT,
-      text: "생각보다 편안한 분위기네요. 만나 뵙게 돼서 반가워요!",
+      location: LOCATION.CAFE,
+      text: "오셨네요! 생각보다 분위기 괜찮지 않나요?",
+    },
+    {
+      role: "player",
+      text: "그러게요! 은근히 아늑한 느낌이에요 :)",
+    },
+    {
+      role: "npc",
+      text: "제가 이런 조용한 카페를 좋아하거든요. 너무 시끄러운 곳은 곤란해서.",
+    },
+    {
+      role: "player",
+      text: "저도 그래요! 사람 많은 곳 보다, 이런 곳이 더 편해요.",
+    },
+    {
+      role: "npc",
+      text: "오! 취향이 비슷하네요? 소개해준 친구한테 고마워해야겠어요. 😄",
     },
     {
       type: "choice",
-      question: "인사를 이어갑니다",
+      question: "대화의 방향을 정해볼까요?",
       options: [
         {
-          label: "저도 반가워요! 오늘 날씨도 좋아서 기분이 좋네요",
-          next: SCENE.INTEREST_DISCUSSION,
+          label: "조금 더 밝고 칭찬 중심으로 이어가기",
           tone: "Warm",
-          intent: "Supportive"
+          intent: "Supportive",
+          next: SCENE.BRIGHT_FLOW
         },
         {
-          label: "생각보다 금방 오셨네요.",
-          next: SCENE.INTEREST_DISCUSSION,
+          label: "상대에 대한 관심 중심으로 이어가기",
           tone: "Neutral",
-          intent: "Probing"
-        },
-        {
-          label: "편하게 말씀해주시면 좋을 것 같아요.",
-          next: SCENE.INTEREST_DISCUSSION,
-          tone: "Dry",
-          intent: "Supportive"
+          intent: "Probing",
+          next: SCENE.CURIOUS_FLOW
         }
       ]
     }
   ],
+
+  [SCENE.BRIGHT_FLOW]: [
+    {
+      role: "npc",
+      text: "맞아요. 좋은 인연 같아요! 오늘 기분이 좋네요."
+    },
+    {
+      role: "player",
+      text: "저도요! 좋은 첫 인상이네요 :)",
+    },
+    {
+      next: SCENE.COMMON_AFTER_BRANCH
+    }
+  ],
+
+  [SCENE.CURIOUS_FLOW]: [
+    {
+      role: "npc",
+      text: "관심 가져주셔서 감사해요! 오늘 어떠셨어요? 바쁘지 않으셨어요?"
+    },
+    {
+      role: "player",
+      text: "조금 정신 없는 날이었는데, 지금은 여유롭네요!"
+    },
+    {
+      next: SCENE.COMMON_AFTER_BRANCH
+    }
+  ],
+
+  [SCENE.COMMON_AFTER_BRANCH]: [
+    {
+      role: "npc",
+      text: "혹시 좋아하시는 취미 있어요? 저는 일기 쓰는 걸 좋아해요."
+    },
+    {
+      type: "choice",
+      options: [
+        {
+          label: "일기라니 멋져요! 저도 궁금해요",
+          next: SCENE.HOBBY_DISCUSSION,
+          tone: "Warm",
+          intent: "Supportive"
+        },
+        {
+          label: "와.. 어떤 걸 기록하세요?",
+          next: SCENE.HOBBY_DISCUSSION,
+          tone: "Neutral",
+          intent: "Probing"
+        }
+      ]
+    }
+  ],
+  
 
   [SCENE.INTEREST_DISCUSSION]: [
     {
