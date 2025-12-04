@@ -35,6 +35,7 @@ export function useStoryEngine() {
   const [isEnding, setIsEnding] = useState(false);
   const [engineError, setEngineError] = useState("");
   const [currentLocation, setCurrentLocation] = useState("default");
+  const [locationVersion, setLocationVersion] = useState(0);
   const mbtiRef = useRef(null);
 
   // 🔥 호감도 추가
@@ -76,7 +77,15 @@ export function useStoryEngine() {
     }
 
     if (sceneLocation) {
-      setCurrentLocation(sceneLocation);
+      const isLocationChanged = sceneLocation !== currentLocation;
+
+      if (isLocationChanged) {
+        setHistory([]);                
+        setCurrentLocation(sceneLocation);
+        setLocationVersion((v) => v + 1); 
+      } else {
+        setCurrentLocation(sceneLocation);
+      }
     }
 
     for (const item of sceneArr) {
@@ -214,6 +223,7 @@ export function useStoryEngine() {
     const scenario = storyTable[mbti];
     setCurrentScenario(scenario);
     setCurrentLocation(LOCATION.DEFAULT);
+    setLocationVersion((v) => v + 1); // Н?,Н1~ Й3?И¤л Н<o dY"Э
 
     abortRef.current = false;
     runScene(scenario, SCENE.CONTACT_DECISION);
@@ -235,14 +245,18 @@ export function useStoryEngine() {
     stepRef.current = 0;
   };
 
+  const clearEngineError = () => setEngineError("");
+
   return {
     history,
     pendingChoice,
     currentScene,
     currentMBTI,
     currentLocation,
+    locationVersion,
     isEnding,
     engineError,
+    clearEngineError,
     start,
     choose,
     reset,
