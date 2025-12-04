@@ -47,6 +47,7 @@ function App() {
 
   const {
     history,
+    locationVersion,
     pendingChoice,
     start,
     choose,
@@ -187,6 +188,7 @@ function App() {
         /* 3️⃣ 진행중 → 채팅 화면 */
         <>
           <ChatContainer
+            key={locationVersion} // 위치 변경 시 리렌더링 트리거
             messages={history}
             npcProfile={userInfo.npcProfile}
             currentLocation={currentLocation}

@@ -69,6 +69,12 @@ export function useStoryEngine() {
 
     const sceneLocation = sceneArr[0]?.location;
 
+    if (sceneLocation && sceneLocation !== currentLocation) {
+      setHistory([]);                 // 이전 대화 제거
+      setCurrentLocation(sceneLocation);
+      setLocationVersion((v) => v + 1);
+    }
+
     if (sceneLocation) {
       setCurrentLocation(sceneLocation);
     }
