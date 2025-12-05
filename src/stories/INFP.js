@@ -158,10 +158,12 @@ const INFP = {
       role: "npc",
       location: LOCATION.CAFE,
       text: "오셨네요! 생각보다 분위기 괜찮지 않나요?",
+      delay: 2000,
     },
     {
       role: "player",
       text: "그러게요! 은근히 아늑한 느낌이에요 :)",
+      delay: 1000,
     },
     {
       role: "npc",
@@ -170,6 +172,7 @@ const INFP = {
     {
       role: "player",
       text: "저도 그래요! 사람 많은 곳 보다, 이런 곳이 더 편해요.",
+      delay: 4000,
     },
     {
       role: "npc",
