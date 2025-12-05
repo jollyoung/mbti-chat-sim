@@ -25,7 +25,7 @@ const createSessionId = () => {
   return `${prefix}${timestamp}-${randomPart}`;
 };
 
-const SPEECH_DELAY_MS = 300;
+const SPEECH_DELAY_MS = 1000;
 
 export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
