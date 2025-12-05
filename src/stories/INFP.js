@@ -205,7 +205,7 @@ const INFP = {
       text: "저도요! 좋은 첫 인상이네요 :)",
     },
     {
-      next: SCENE.COMMON_AFTER_BRANCH
+      next: SCENE.CURIOUS_FLOW
     }
   ],
 

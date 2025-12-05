@@ -3,7 +3,7 @@ import axios from "axios";
 import { SCENE } from "../constants/sceneIDs";
 import { LOCATION } from "../constants/locations";
 
-// 시나리오 테이블
+// Н<oЙ,~Й▌кН~ б.OН?'Й,"
 import INFP from "../stories/INFP";
 import INFJ from "../stories/INFJ";
 import INTJ from "../stories/INTJ";
@@ -17,13 +17,15 @@ import ISFJ from "../stories/ISFJ";
 import ISTP from "../stories/ISTP";
 import ISTJ from "../stories/ISTJ";
 
-// 세션 ID 생성기
+// Н,,Н.~ ID НЯ?Н,ё
 const createSessionId = () => {
   const prefix = "session-";
   const timestamp = Date.now();
   const randomPart = Math.random().toString(36).substring(2, 8);
   return `${prefix}${timestamp}-${randomPart}`;
 };
+
+const SPEECH_DELAY_MS = 300;
 
 export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
@@ -38,7 +40,7 @@ export function useStoryEngine() {
   const [locationVersion, setLocationVersion] = useState(0);
   const mbtiRef = useRef(null);
 
-  // 호감도 (보류)
+  // dY"Э б~,И°?Й?, Н"И°?
   const [affection, setAffection] = useState(0);
 
   const sessionIdRef = useRef(createSessionId());
@@ -62,7 +64,7 @@ export function useStoryEngine() {
 
   const runScene = async (scenario, sceneName) => {
     if (!scenario || !scenario[sceneName]) {
-      setEngineError(`시나리오 '${sceneName}' 를 찾을 수 없습니다.`);
+      setEngineError(`Н<oЙ,~Й▌кН~Н-?Н,o '${sceneName}' Н°_Н?, Н^~ Н-+НSцЙ<^Й<.`);
       return;
     }
 
@@ -71,7 +73,7 @@ export function useStoryEngine() {
     const sceneLocation = sceneArr[0]?.location;
 
     if (sceneLocation && sceneLocation !== currentLocation) {
-      setHistory([]);                 // 위치 변경 시 히스토리 초기화
+      setHistory([]);                 // Н?'Н , ЙO?бT" Н oИё°
       setCurrentLocation(sceneLocation);
       setLocationVersion((v) => v + 1);
     }
@@ -94,26 +96,26 @@ export function useStoryEngine() {
       const isNpc = item.role === "npc";
       const isPlayer = item.role === "player";
 
-      /** NPC/Player 대화 추가 */
+      /** NPC/Player ЙO?Н,к */
       if (isNpc || isPlayer) {
-        await new Promise((resolve) => setTimeout(resolve, 600));
+        await new Promise((resolve) => setTimeout(resolve, SPEECH_DELAY_MS));
         setHistory((prev) => [...prev, item]);
         continue;
       }
 
-      /** 엔딩 처리 */
+      /** Н-"Й"c Н¤~Й▌к */
       if (item.type === "end") {
-        setHistory(prev => [...prev, item]);  // 엔딩 대화 추가
+        setHistory(prev => [...prev, item]);  // Н-"Й"c ЙO?Н,к НoЙ Э
 
         if (!abortRef.current && sessionIdRef.current) {
           setTimeout(() => {
-            setIsEnding(true); // 3초 후 엔딩 상태로 전환
+            setIsEnding(true); // dY`% Й^Н?Й% НoЙ Э б>, Н-"Й"c бZ~Н?'Н?Йнo
           }, 3000);
         }
         return;
       }
 
-      /** 선택지 처리 */
+      /** Н, бЯ?Н? б`oН<o */
       if (item.type === "choice") {
         await new Promise((resolve) => setTimeout(resolve, 600));
         setPendingChoice(item);
@@ -128,13 +130,13 @@ export function useStoryEngine() {
     const activeSessionId = sessionIdRef.current;
     setPendingChoice(null);
 
-    // 사용자 선택지 추가
+    // Нo Н ? Йc"Н<oН? б`oН<o
     setHistory((prev) => [
       ...prev,
-      { role: "user", text: option.label || "사용자 선택" },
+      { role: "user", text: option.label || "Н, бЯ?" },
     ]);
 
-    // 사용자 선택지 로그 전송
+    // ЙнoИ·, Н ?НzЭ(Н, бЯ?Н?)
     stepRef.current += 1;
     await axios.post("/api/logChoice", {
       sessionId: activeSessionId,
@@ -145,18 +147,18 @@ export function useStoryEngine() {
       tone: option.tone || "",
       intent: option.intent || "",
       timestamp: Date.now(),
-      sex: userInfoRef.current?.sex || "",   
-      age: userInfoRef.current?.age || "",  
+      sex: userInfoRef.current?.sex || "",   // Г+? Н^~Н !
+      age: userInfoRef.current?.age || "",   // Г+? Н^~Н !
     });
 
-    // 호감도 업데이트
+    // dY"Э affection И°ёН< 
     let updatedAffection = affection;
     if (typeof option.affection === "number") {
       updatedAffection = affection + option.affection;
       setAffection((prev) => prev + option.affection);
     }
 
-    /** 엔딩 분기 처리 */
+    /** Йc?б<° Н-"Й"c Й,И,° */
     if (option.next === "CHECK_END") {
       let targetScene = "end_D";
 
@@ -186,7 +188,7 @@ export function useStoryEngine() {
       return;
     }
 
-    /** 엔딩 처리 */
+    /** Н▌%Н<o END */
     if (option.next === "END") {
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
@@ -201,7 +203,7 @@ export function useStoryEngine() {
       return;
     }
 
-    /** 다음 씬으로 이동 */
+    /** Н?мЙ°~Н ? Next НSб+ Й▌к Н?'Й?T */
     if (option.next) {
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setCurrentScene(option.next);
@@ -217,7 +219,7 @@ export function useStoryEngine() {
     setPendingChoice(null);
     mbtiRef.current = mbti;
     setCurrentMBTI(mbti);
-    setAffection(0); // 호감도 초기화
+    setAffection(0); // Н'^И,°бT" dY"Э
 
     userInfoRef.current = userInfo;
 
@@ -226,7 +228,7 @@ export function useStoryEngine() {
     const scenario = storyTable[mbti];
     setCurrentScenario(scenario);
     setCurrentLocation(LOCATION.DEFAULT);
-    setLocationVersion((v) => v + 1); // 위치 버전 증가
+    setLocationVersion((v) => v + 1); // D??,D?1~ DT3?D~ADп D?<o dY"D-
 
     abortRef.current = false;
     runScene(scenario, SCENE.CONTACT_DECISION);
@@ -242,7 +244,7 @@ export function useStoryEngine() {
     setCurrentLocation(LOCATION.DEFAULT);
     setIsEnding(false);
     setEngineError("");
-    setAffection(0); // 호감도 초기화
+    setAffection(0); // Н'^И,°бT" dY"Э
 
     sessionIdRef.current = createSessionId();
     stepRef.current = 0;
