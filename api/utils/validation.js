@@ -10,7 +10,7 @@ export function findMissingEnv(env = process.env) {
 }
 
 export function validateChoicePayload(body = {}) {
-  const { mbti, scene, userChoice, tone = null, emotion = null, comm = null, sex = null, age = null } = body;
+  const { mbti, scene, userChoice, tone = null, intent = null, sex = null, age = null } = body;
 
   if (!mbti || !scene || !userChoice) {
     return { error: "mbti, scene, and userChoice are required." };
@@ -22,8 +22,7 @@ export function validateChoicePayload(body = {}) {
       scene,
       userChoice,
       tone,
-      emotion,
-      comm,
+      intent,
       timestamp: Date.now(),
       sessionId: body.sessionId || null,
       step: body.step ?? null,

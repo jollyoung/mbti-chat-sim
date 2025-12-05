@@ -139,11 +139,10 @@ export function useStoryEngine() {
       scene: currentScene,
       userChoice: option.label,
       tone: option.tone || "",
-      emotion: option.emotion || "",
-      comm: option.comm || "",
+      intent: option.intent || "",
       timestamp: Date.now(),
-      sex: userInfoRef.current?.sex || "",   // ← 수정!
-      age: userInfoRef.current?.age || "",   // ← 수정!
+      sex: userInfoRef.current?.sex || "",   
+      age: userInfoRef.current?.age || "",  
     });
 
     // 🔥 affection 갱신

@@ -31,8 +31,7 @@ test("validateChoicePayload normalizes optional fields and timestamp", () => {
   });
   assert.equal(error, undefined);
   assert.equal(data.tone, null);
-  assert.equal(data.emotion, null);
-  assert.equal(data.comm, null);
+  assert.equal(data.intent, null);
   assert.equal(typeof data.timestamp, "number");
 });
 
