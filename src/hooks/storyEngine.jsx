@@ -17,7 +17,7 @@ import ISFJ from "../stories/ISFJ";
 import ISTP from "../stories/ISTP";
 import ISTJ from "../stories/ISTJ";
 
-// 세션 ID 생성
+// 세션 ID 생성기
 const createSessionId = () => {
   const prefix = "session-";
   const timestamp = Date.now();
@@ -38,7 +38,7 @@ export function useStoryEngine() {
   const [locationVersion, setLocationVersion] = useState(0);
   const mbtiRef = useRef(null);
 
-  // 🔥 호감도 추가
+  // 호감도 (보류)
   const [affection, setAffection] = useState(0);
 
   const sessionIdRef = useRef(createSessionId());
@@ -62,7 +62,7 @@ export function useStoryEngine() {
 
   const runScene = async (scenario, sceneName) => {
     if (!scenario || !scenario[sceneName]) {
-      setEngineError(`시나리오에서 '${sceneName}' 찾을 수 없습니다.`);
+      setEngineError(`시나리오 '${sceneName}' 를 찾을 수 없습니다.`);
       return;
     }
 
@@ -71,7 +71,7 @@ export function useStoryEngine() {
     const sceneLocation = sceneArr[0]?.location;
 
     if (sceneLocation && sceneLocation !== currentLocation) {
-      setHistory([]);                 // 이전 대화 제거
+      setHistory([]);                 // 위치 변경 시 히스토리 초기화
       setCurrentLocation(sceneLocation);
       setLocationVersion((v) => v + 1);
     }
@@ -91,25 +91,29 @@ export function useStoryEngine() {
     for (const item of sceneArr) {
       if (abortRef.current) return;
 
-      /** NPC 대사 */
-      if (item.role === "npc") {
-        await new Promise((resolve) => setTimeout(resolve, 600)); 
+      const isNpc = item.role === "npc";
+      const isPlayer = item.role === "player";
+
+      /** NPC/Player 대화 추가 */
+      if (isNpc || isPlayer) {
+        await new Promise((resolve) => setTimeout(resolve, 600));
         setHistory((prev) => [...prev, item]);
+        continue;
       }
 
       /** 엔딩 처리 */
       if (item.type === "end") {
-        setHistory(prev => [...prev, item]);  // 엔딩 대사 출력
+        setHistory(prev => [...prev, item]);  // 엔딩 대화 추가
 
         if (!abortRef.current && sessionIdRef.current) {
           setTimeout(() => {
-            setIsEnding(true); // 👉 마지막 출력 후 엔딩 페이지로
+            setIsEnding(true); // 3초 후 엔딩 상태로 전환
           }, 3000);
         }
         return;
       }
 
-      /** 선택지 표시 */
+      /** 선택지 처리 */
       if (item.type === "choice") {
         await new Promise((resolve) => setTimeout(resolve, 600));
         setPendingChoice(item);
@@ -124,13 +128,13 @@ export function useStoryEngine() {
     const activeSessionId = sessionIdRef.current;
     setPendingChoice(null);
 
-    // 유저 메시지 표시
+    // 사용자 선택지 추가
     setHistory((prev) => [
       ...prev,
-      { role: "user", text: option.label || "선택" },
+      { role: "user", text: option.label || "사용자 선택" },
     ]);
 
-    // 로그 저장(선택지)
+    // 사용자 선택지 로그 전송
     stepRef.current += 1;
     await axios.post("/api/logChoice", {
       sessionId: activeSessionId,
@@ -145,14 +149,14 @@ export function useStoryEngine() {
       age: userInfoRef.current?.age || "",  
     });
 
-    // 🔥 affection 갱신
+    // 호감도 업데이트
     let updatedAffection = affection;
     if (typeof option.affection === "number") {
       updatedAffection = affection + option.affection;
       setAffection((prev) => prev + option.affection);
     }
 
-    /** 멀티 엔딩 분기 */
+    /** 엔딩 분기 처리 */
     if (option.next === "CHECK_END") {
       let targetScene = "end_D";
 
@@ -182,7 +186,7 @@ export function useStoryEngine() {
       return;
     }
 
-    /** 즉시 END */
+    /** 엔딩 처리 */
     if (option.next === "END") {
       await axios.post("/api/logSession", {
         sessionId: activeSessionId,
@@ -197,7 +201,7 @@ export function useStoryEngine() {
       return;
     }
 
-    /** 일반적 Next 스토리 이동 */
+    /** 다음 씬으로 이동 */
     if (option.next) {
       if (!abortRef.current && sessionIdRef.current === activeSessionId) {
         setCurrentScene(option.next);
@@ -213,7 +217,7 @@ export function useStoryEngine() {
     setPendingChoice(null);
     mbtiRef.current = mbti;
     setCurrentMBTI(mbti);
-    setAffection(0); // 초기화 🔥
+    setAffection(0); // 호감도 초기화
 
     userInfoRef.current = userInfo;
 
@@ -222,7 +226,7 @@ export function useStoryEngine() {
     const scenario = storyTable[mbti];
     setCurrentScenario(scenario);
     setCurrentLocation(LOCATION.DEFAULT);
-    setLocationVersion((v) => v + 1); // Н?,Н1~ Й3?И¤л Н<o dY"Э
+    setLocationVersion((v) => v + 1); // 위치 버전 증가
 
     abortRef.current = false;
     runScene(scenario, SCENE.CONTACT_DECISION);
@@ -238,7 +242,7 @@ export function useStoryEngine() {
     setCurrentLocation(LOCATION.DEFAULT);
     setIsEnding(false);
     setEngineError("");
-    setAffection(0); // 초기화 🔥
+    setAffection(0); // 호감도 초기화
 
     sessionIdRef.current = createSessionId();
     stepRef.current = 0;

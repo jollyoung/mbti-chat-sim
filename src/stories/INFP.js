@@ -233,13 +233,13 @@ const INFP = {
       options: [
         {
           label: "일기라니 멋져요! 저도 궁금해요",
-          next: SCENE.HOBBY_DISCUSSION,
+          next: SCENE.INTEREST_DISCUSSION,
           tone: "Warm",
           intent: "Supportive"
         },
         {
           label: "와.. 어떤 걸 기록하세요?",
-          next: SCENE.HOBBY_DISCUSSION,
+          next: SCENE.INTEREST_DISCUSSION,
           tone: "Neutral",
           intent: "Probing"
         }
