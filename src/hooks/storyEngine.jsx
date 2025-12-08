@@ -197,6 +197,38 @@ export function useStoryEngine() {
     runScene(scenario, SCENE.CONTACT_DECISION);
   };
 
+  // refs/state 들 선언한 뒤…
+  const currentSceneRef = useRef(currentScene);
+  useEffect(() => {
+    currentSceneRef.current = currentScene;
+  }, [currentScene]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      navigator.sendBeacon(
+        "/api/logChoice",
+        JSON.stringify({
+          sessionId: sessionIdRef.current,
+          attemptIndex: attemptIndexRef.current,
+          mbti: mbtiRef.current,
+          scene: currentSceneRef.current,
+          userChoice: "[DROP_UNLOAD]",
+          tone: "",
+          intent: "",
+          next_exists: false,
+          drop: true,
+          timestamp: Date.now(),
+          sex: userInfoRef.current?.sex,
+          age: userInfoRef.current?.age,
+        })
+      );
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
+
   const reset = () => {
     abortRef.current = true;
     setHistory([]);
@@ -211,6 +243,7 @@ export function useStoryEngine() {
 
     sessionIdRef.current = createSessionId();
     stepRef.current = 0;
+    attemptIndexRef.current += 1;
   };
 
   const clearEngineError = () => setEngineError("");
