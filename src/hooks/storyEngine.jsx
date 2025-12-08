@@ -135,10 +135,11 @@ export function useStoryEngine() {
     }
   };
 
+  const attemptIndexRef = useRef(1);
+
   const choose = async (option) => {
     if (abortRef.current) return;
 
-    const activeSessionId = sessionIdRef.current;
     setPendingChoice(null);
 
     // Нo Н ? Йc"Н<oН? б`oН<o
@@ -149,78 +150,29 @@ export function useStoryEngine() {
 
     // ЙнoИ·, Н ?НzЭ(Н, бЯ?Н?)
     stepRef.current += 1;
+
     await axios.post("/api/logChoice", {
-      sessionId: activeSessionId,
-      step: stepRef.current,
+      sessionId: sessionIdRef.current,
+      attemptIndex: attemptIndexRef.current,
       mbti: currentMBTI,
       scene: currentScene,
       userChoice: option.label,
       tone: option.tone || "",
       intent: option.intent || "",
+      ...resultSignal,
       timestamp: Date.now(),
       sex: userInfoRef.current?.sex || "",   // Г+? Н^~Н !
       age: userInfoRef.current?.age || "",   // Г+? Н^~Н !
     });
 
-    // dY"Э affection И°ёН< 
-    let updatedAffection = affection;
-    if (typeof option.affection === "number") {
-      updatedAffection = affection + option.affection;
-      setAffection((prev) => prev + option.affection);
-    }
-
-    /** Йc?б<° Н-"Й"c Й,И,° */
-    if (option.next === "CHECK_END") {
-      let targetScene = "end_D";
-
-      if (updatedAffection >= 10) targetScene = "end_A";
-      else if (updatedAffection >= 5) targetScene = "end_B";
-      else if (updatedAffection >= 1) targetScene = "end_C";
-
-      console.log("ENDING LOG PAYLOAD", {
-        sessionId: activeSessionId,
-        mbti: mbtiRef.current,
-        endedAt: Date.now(),
-      });
-
-      await axios.post("/api/logSession", {
-        sessionId: activeSessionId,
-        mbti: mbtiRef.current,
-        sex: userInfoRef.current?.sex || "",
-        age: userInfoRef.current?.age || "",
-        endedAt: Date.now(),
-      });
-
-
-      if (!abortRef.current && sessionIdRef.current === activeSessionId) {
-        setCurrentScene(targetScene);
-        runScene(currentScenario, targetScene);
-      }
+    
+    if (!option.next) {
+      setIsEnding(true);
       return;
     }
 
-    /** Н▌%Н<o END */
-    if (option.next === "END") {
-      await axios.post("/api/logSession", {
-        sessionId: activeSessionId,
-        mbti: mbtiRef.current,
-        endedAt: Date.now(),
-      });
-
-      if (!abortRef.current && sessionIdRef.current === activeSessionId) {
-        setCurrentScene("end_D"); // or target ending scene
-        runScene(currentScenario, "end_D");
-      }
-      return;
-    }
-
-    /** Н?мЙ°~Н ? Next НSб+ Й▌к Н?'Й?T */
-    if (option.next) {
-      if (!abortRef.current && sessionIdRef.current === activeSessionId) {
-        setCurrentScene(option.next);
-        runScene(currentScenario, option.next);
-      }
-    }
+    setCurrentScene(option.next);
+    runScene(currentScenario, option.next);
   };
 
 
