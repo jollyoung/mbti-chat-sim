@@ -142,30 +142,29 @@ export function useStoryEngine() {
 
     setPendingChoice(null);
 
-    // Нo Н ? Йc"Н<oН? б`oН<o
-    setHistory((prev) => [
-      ...prev,
-      { role: "user", text: option.label || "Н, бЯ?" },
-    ]);
+    setHistory(prev => [...prev, { role: "user", text: option.label }]);
 
-    // ЙнoИ·, Н ?НzЭ(Н, бЯ?Н?)
     stepRef.current += 1;
+
+    const resultSignal = {
+      next_exists: !!option.next,
+      drop: false, // 유저 이탈 시 별도 처리 예정
+    };
 
     await axios.post("/api/logChoice", {
       sessionId: sessionIdRef.current,
       attemptIndex: attemptIndexRef.current,
-      mbti: currentMBTI,
+      mbti: mbtiRef.current,
       scene: currentScene,
       userChoice: option.label,
       tone: option.tone || "",
       intent: option.intent || "",
       ...resultSignal,
       timestamp: Date.now(),
-      sex: userInfoRef.current?.sex || "",   // Г+? Н^~Н !
-      age: userInfoRef.current?.age || "",   // Г+? Н^~Н !
+      sex: userInfoRef.current?.sex,
+      age: userInfoRef.current?.age,
     });
 
-    
     if (!option.next) {
       setIsEnding(true);
       return;
@@ -174,6 +173,7 @@ export function useStoryEngine() {
     setCurrentScene(option.next);
     runScene(currentScenario, option.next);
   };
+
 
 
   const start = async (mbti, userInfo) => {
