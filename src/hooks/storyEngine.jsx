@@ -221,7 +221,7 @@ export function useStoryEngine() {
           sex: userInfoRef.current?.sex,
           age: userInfoRef.current?.age,
         })
-      );
+      ), { type: "application/json"}
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
