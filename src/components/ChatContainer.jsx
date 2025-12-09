@@ -6,39 +6,38 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
   const [displayLocation, setDisplayLocation] = useState("default");
   const [transitionStage, setTransitionStage] = useState("idle");
 
-
+  // 🔥 장소 전환 애니메이션 실행
   useEffect(() => {
     if (currentLocation === displayLocation) return;
-    setTransitionStage("out");                // 기존 배경 페이드아웃
+    setTransitionStage("out");
     const outTimer = setTimeout(() => {
-      setDisplayLocation(currentLocation);    // 배경 스위치
-      setTransitionStage("in");               // 새 배경 페이드인
+      setDisplayLocation(currentLocation);
+      setTransitionStage("in");
     }, 250);
-    const inTimer = setTimeout(() => setTransitionStage("idle"), 500);
+    const inTimer = setTimeout(() => setTransitionStage("idle"), 600);
+
     return () => {
       clearTimeout(outTimer);
       clearTimeout(inTimer);
     };
   }, [currentLocation, displayLocation]);
 
-  
-  // 🔥 메시지 업데이트 시 자동 스크롤
+  const transitionClass =
+    transitionStage === "out" ? "location-change-out" :
+    transitionStage === "in" ? "location-change-in" : "";
+
+  // 🔥 메시지 변경 시 스크롤
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  
-  const transitionClass = 
-    transitionStage === "out" ? "fade-out" :
-    transitionStage === "in" ? "fade-in" : "";
-
-
   return (
-    <div className={`chat-wrapper ${
-      displayLocation === "cafe" ? "cafe-bg" : 
-      displayLocation === "street"? "street-bg" : 
+    <div className={`chat-wrapper ${transitionClass} ${
+      displayLocation === "cafe" ? "cafe-bg" :
+      displayLocation === "street" ? "street-bg" :
       displayLocation === "home" ? "home-bg" : "default-bg"
     }`}>
+
       <div className="chat-header">
         <img src={npcProfile} className="npc-avatar" />
         <div className="npc-info">
@@ -48,10 +47,13 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
 
       <div className="chat-body">
         {messages.map((msg, i) => (
-          <ChatBubble key={i} role={msg.role} text={msg.text} npcProfile={npcProfile} />
+          <ChatBubble
+            key={i}
+            role={msg.role}
+            text={msg.text}
+            npcProfile={npcProfile}
+          />
         ))}
-
-        {/* 🔥 자동 스크롤 anchor */}
         <div ref={bottomRef} />
       </div>
     </div>
