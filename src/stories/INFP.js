@@ -138,7 +138,7 @@ const INFP = {
   [SCENE.ENDING_ONE]: [
     { role: "npc", text: "오늘 와주셔서 감사합니다. 조심히 들어가세요" },
     {
-      type: "Choice",
+      type: "choice",
       question: "어떤 인사로 마무리할까?",
       options: [
         { label: "오늘 즐거웠어요", next: null, tone: "Warm", intent: "Supportive" },
