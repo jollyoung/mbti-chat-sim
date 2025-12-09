@@ -153,7 +153,7 @@ export function useStoryEngine() {
 
     await axios.post("/api/logChoice", {
       sessionId: sessionIdRef.current,
-      attemptIndex: attemptIndexRef.current,
+      step: stepRef.current,
       mbti: mbtiRef.current,
       scene: currentScene,
       userChoice: option.label,
@@ -197,7 +197,7 @@ export function useStoryEngine() {
     runScene(scenario, SCENE.CONTACT_DECISION);
   };
 
-  // refs/state 들 선언한 뒤…
+
   const currentSceneRef = useRef(currentScene);
   useEffect(() => {
     currentSceneRef.current = currentScene;
