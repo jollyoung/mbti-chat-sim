@@ -7,15 +7,19 @@ import { LOCATION } from "../constants/locations";
 import INFP from "../stories/INFP";
 import INFJ from "../stories/INFJ";
 import INTJ from "../stories/INTJ";
+import INTP from "../stories/INTP";
 import ISFP from "../stories/ISFP";
-import ESTJ from "../stories/ESTJ";
-import ENTP from "../stories/ENTP";
-import ENTJ from "../stories/ENTJ";
-import ESFP from "../stories/ESFP";
-import ENFP from "../stories/ENFP";
 import ISFJ from "../stories/ISFJ";
 import ISTP from "../stories/ISTP";
 import ISTJ from "../stories/ISTJ";
+import ENFP from "../stories/ENFP";
+import ENFJ from "../stories/ENFJ";
+import ENTP from "../stories/ENTP";
+import ENTJ from "../stories/ENTJ";
+import ESFP from "../stories/ESFP";
+import ESFJ from "../stories/ESFJ";
+import ESTP from "../stories/ESTP";
+import ESTJ from "../stories/ESTJ";
 
 // 세션 ID 생성
 const createSessionId = () => {
