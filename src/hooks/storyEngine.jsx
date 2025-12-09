@@ -205,24 +205,23 @@ export function useStoryEngine() {
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      navigator.sendBeacon(
-        "/api/logChoice",
-        JSON.stringify({
-          sessionId: sessionIdRef.current,
-          attemptIndex: attemptIndexRef.current,
-          mbti: mbtiRef.current,
-          scene: currentSceneRef.current,
-          userChoice: "[DROP_UNLOAD]",
-          tone: "",
-          intent: "",
-          next_exists: false,
-          drop: true,
-          timestamp: Date.now(),
-          sex: userInfoRef.current?.sex,
-          age: userInfoRef.current?.age,
-        })
-      ), { type: "application/json"}
+      const form = new FormData();
+      form.append("sessionId", sessionIdRef.current);
+      form.append("attemptIndex", attemptIndexRef.current);
+      form.append("mbti", mbtiRef.current);
+      form.append("scene", currentScene);
+      form.append("userChoice", "[DROP_UNLOAD]");
+      form.append("tone", "");
+      form.append("intent", "");
+      form.append("next_exists", "false");
+      form.append("drop", "true");
+      form.append("timestamp", Date.now());
+      form.append("sex", userInfoRef.current?.sex ?? "");
+      form.append("age", userInfoRef.current?.age ?? "");
+
+      navigator.sendBeacon("/api/logChoice", form);
     };
+
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
