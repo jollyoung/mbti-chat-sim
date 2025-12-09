@@ -16,7 +16,7 @@ const INFP = {
           tone: "Neutral",
           intent: "Self-disclosure",
           actionText: (nickname) =>
-            `안녕하세요! ${nickname} 통해 소개받은 ${nickname}이라고 합니다.\n반가워요`
+            `안녕하세요! 연우씨 통해 소개받은 ${nickname}이라고 합니다.\n반가워요`
         },
         {
           label: "상대 연락 기다리기",
@@ -76,9 +76,9 @@ const INFP = {
 
   // 04. 다음날 톤 확인
   [SCENE.DAY2_CHEER]: [
-    { role: "npc", text: "출근하셨어요? 오늘 너무 힘들지 않으셨으면 좋겠어요" },
-    { role: "player", text: "파이팅입니다. 오늘도 무사히 끝나길" },
-    { role: "npc", text: "감사해요 ㅎㅎ" },
+    { role: "npc", text: "출근하셨어요? 오늘 너무 힘들지 않으셨으면 좋겠어요", delay: 1000 },
+    { role: "player", text: "파이팅입니다. 오늘도 무사히 끝나길", delay: 1000 },
+    { role: "npc", text: "감사해요 ㅎㅎ", delay: 1000 },
 
     { next: SCENE.FIRST_MEET }
   ],
@@ -136,7 +136,15 @@ const INFP = {
 
   // 08. 엔딩 (단일 엔딩)
   [SCENE.ENDING_ONE]: [
-    { role: "npc", text: "오늘 와주셔서 감사합니다. 조심히 들어가세요" }
+    { role: "npc", text: "오늘 와주셔서 감사합니다. 조심히 들어가세요" },
+    {
+      type: "Choice",
+      question: "어떤 인사로 마무리할까?",
+      options: [
+        { label: "오늘 즐거웠어요", next: null, tone: "Warm", intent: "Supportive" },
+        { label: "다음에 또 봐요", next: null, tone: "Neutral", intent: "Supportive" }
+      ]
+    }
   ]
 };
 
