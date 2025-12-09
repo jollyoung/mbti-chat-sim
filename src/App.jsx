@@ -62,6 +62,8 @@ function App() {
     e.preventDefault();
 
     const sex = e.target.sex.value;
+    const age = e.target.age.value;
+    const nickname = e.target.nickname.value;
     const mbti = e.target.mbti.value;
 
     if (!sex) {
@@ -79,6 +81,11 @@ function App() {
       return;
     }
 
+    if (nickname.trim() === "") {
+      setErrorMessage(STRINGS.nicknameRequired);
+      return;
+    }
+
     // 🔥 MBTI별 NPC 프로필 자동 결정
     let npcProfile = DEFAULT_NPC_PROFILE;
 
@@ -86,8 +93,8 @@ function App() {
       npcProfile = MBTI_PROFILE_MAP[mbti];
     }
 
-    setUserInfo({ sex, age, mbti, npcProfile });
-    start(mbti, { sex, age, mbti, npcProfile });
+    setUserInfo({ sex, age, mbti, nickname, npcProfile });
+    start(mbti, { sex, age, mbti, nickname, npcProfile });
   };
 
   return (
@@ -138,6 +145,17 @@ function App() {
                 }}
                 className="input-box"
                 placeholder="나이를 입력하세요"
+              />
+            </div>
+
+            {/* 유저 이름 */}
+            <div className="form-group">
+              <label>이름</label>
+              <input
+                type="text"
+                name="nickname"
+                className="input-box"
+                placeholder="닉네임을 입력하세요"
               />
             </div>
 

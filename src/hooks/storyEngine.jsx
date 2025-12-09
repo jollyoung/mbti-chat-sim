@@ -159,6 +159,14 @@ export function useStoryEngine() {
       age: userInfoRef.current?.age,
     });
 
+    if (!option.silent) {
+      setHistory(prev => [...prev, { role: "user", text: option.label }]);
+    } else if (option.actionText) {
+      const text = option.actionText(nicknameRef.current);
+      setHistory(prev => [...prev, { role: "user", text }]);
+    }
+
+
     if (!option.next) {
       setIsEnding(true);
       return;
