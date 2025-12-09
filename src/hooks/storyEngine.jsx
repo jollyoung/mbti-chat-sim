@@ -146,11 +146,6 @@ export function useStoryEngine() {
 
     stepRef.current += 1;
 
-    const resultSignal = {
-      next_exists: !!option.next,
-      drop: false, // 유저 이탈 시 별도 처리 예정
-    };
-
     await axios.post("/api/logChoice", {
       sessionId: sessionIdRef.current,
       step: stepRef.current,
@@ -159,7 +154,6 @@ export function useStoryEngine() {
       userChoice: option.label,
       tone: option.tone || "",
       intent: option.intent || "",
-      ...resultSignal,
       timestamp: Date.now(),
       sex: userInfoRef.current?.sex,
       age: userInfoRef.current?.age,
@@ -213,8 +207,6 @@ export function useStoryEngine() {
       form.append("userChoice", "[DROP_UNLOAD]");
       form.append("tone", "");
       form.append("intent", "");
-      form.append("next_exists", "false");
-      form.append("drop", "true");
       form.append("timestamp", Date.now());
       form.append("sex", userInfoRef.current?.sex ?? "");
       form.append("age", userInfoRef.current?.age ?? "");

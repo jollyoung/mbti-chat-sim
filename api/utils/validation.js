@@ -26,8 +26,6 @@ export function validateChoicePayload(body = {}) {
       timestamp: Date.now(),
       sessionId: body.sessionId || null,
       step: body.step ?? null,
-      next_exists: body.next_exists ?? null,
-      drop: body.drop ?? null,
       sex: body.sex || null,
       age: body.age || null,
     }

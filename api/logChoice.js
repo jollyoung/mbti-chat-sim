@@ -37,8 +37,6 @@ export default async function handler(req, res) {
         data.userChoice,
         data.tone,
         data.intent,
-        data.next_exists,  // 🔥 결과 신호
-        data.drop,         // 🔥 도중 이탈 여부
         new Date(data.timestamp).toISOString(),
         data.sex || "",
         data.age || "",
