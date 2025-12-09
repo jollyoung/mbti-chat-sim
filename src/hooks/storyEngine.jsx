@@ -3,7 +3,7 @@ import axios from "axios";
 import { SCENE } from "../constants/sceneIDs";
 import { LOCATION } from "../constants/locations";
 
-// Н<oЙ,~Й▌кН~ б.OН?'Й,"
+// MBTI 스토리 임포트
 import INFP from "../stories/INFP";
 import INFJ from "../stories/INFJ";
 import INTJ from "../stories/INTJ";
@@ -17,7 +17,7 @@ import ISFJ from "../stories/ISFJ";
 import ISTP from "../stories/ISTP";
 import ISTJ from "../stories/ISTJ";
 
-// Н,,Н.~ ID НЯ?Н,ё
+// 세션 ID 생성
 const createSessionId = () => {
   const prefix = "session-";
   const timestamp = Date.now();
@@ -42,9 +42,6 @@ export function useStoryEngine() {
   const mbtiRef = useRef(null);
   const nicknameRef = useRef("");
 
-  // dY"Э б~,И°?Й?, Н"И°?
-  const [affection, setAffection] = useState(0);
-
   const sessionIdRef = useRef(createSessionId());
   const stepRef = useRef(0);
   const abortRef = useRef(false);
@@ -52,21 +49,25 @@ export function useStoryEngine() {
   const storyTable = {
     INFP,
     INFJ,
+    INTP,
     INTJ,
     ISFP,
-    ESTJ,
-    ENTP,
-    ENTJ,
-    ESFP,
-    ENFP,
     ISFJ,
     ISTP,
     ISTJ,
+    ENFP,
+    ENFJ,
+    ENTP,
+    ENTJ,
+    ESFP,
+    ESFJ,
+    ESTP,
+    ESTJ,
   };
 
   const runScene = async (scenario, sceneName) => {
     if (!scenario || !scenario[sceneName]) {
-      setEngineError(`Н<oЙ,~Й▌кН~Н-?Н,o '${sceneName}' Н°_Н?, Н^~ Н-+НSцЙ<^Й<.`);
+      setEngineError(`스토리 엔진 오류: '${sceneName}' 씬을 찾을 수 없습니다.`);
       return;
     }
 
@@ -75,7 +76,7 @@ export function useStoryEngine() {
     const sceneLocation = sceneArr[0]?.location;
 
     if (sceneLocation && sceneLocation !== currentLocation) {
-      setHistory([]);                 // Н?'Н , ЙO?бT" Н oИё°
+      setHistory([]);                 
       setCurrentLocation(sceneLocation);
       setLocationVersion((v) => v + 1);
     }
@@ -98,7 +99,7 @@ export function useStoryEngine() {
       const isNpc = item.role === "npc";
       const isPlayer = item.role === "player";
 
-      /** NPC/Player ЙO?Н,к */
+      // 딜레이 후 메시지 추가
       if (isNpc || isPlayer) {
         const delay = typeof item.delay === "number" ? item.delay : SPEECH_DELAY_MS;
         await new Promise((resolve) => setTimeout(resolve, delay));
@@ -106,7 +107,7 @@ export function useStoryEngine() {
         continue;
       }
 
-      /** Auto-advance when item only points to next scene */
+      // 다음 씬으로 이동
       if (item.next && !item.type && !item.role) {
         if (!abortRef.current && sessionIdRef.current) {
           setCurrentScene(item.next);
@@ -115,19 +116,19 @@ export function useStoryEngine() {
         return;
       }
 
-      /** Н-"Й"c Н¤~Й▌к */
+      // 엔딩 처리
       if (item.type === "end") {
-        setHistory(prev => [...prev, item]);  // Н-"Й"c ЙO?Н,к НoЙ Э
+        setHistory(prev => [...prev, item]);  // 엔딩 메시지 추가
 
         if (!abortRef.current && sessionIdRef.current) {
           setTimeout(() => {
-            setIsEnding(true); // dY`% Й^Н?Й% НoЙ Э б>, Н-"Й"c бZ~Н?'Н?Йнo
+            setIsEnding(true); // 엔딩 상태로 전환
           }, 3000);
         }
         return;
       }
 
-      /** Н, бЯ?Н? б`oН<o */
+      // 선택지 처리
       if (item.type === "choice") {
         await new Promise((resolve) => setTimeout(resolve, CHOICE_DELAY_MS));
         setPendingChoice(item);
@@ -203,7 +204,7 @@ export function useStoryEngine() {
     const scenario = storyTable[mbti];
     setCurrentScenario(scenario);
     setCurrentLocation(LOCATION.DEFAULT);
-    setLocationVersion((v) => v + 1); // D??,D?1~ DT3?D~ADп D?<o dY"D-
+    setLocationVersion((v) => v + 1); // 위치 버전 증가
 
     abortRef.current = false;
     runScene(scenario, SCENE.CONTACT_DECISION);
@@ -248,7 +249,6 @@ export function useStoryEngine() {
     setCurrentLocation(LOCATION.DEFAULT);
     setIsEnding(false);
     setEngineError("");
-    setAffection(0); // Н'^И,°бT" dY"Э
 
     sessionIdRef.current = createSessionId();
     stepRef.current = 0;
