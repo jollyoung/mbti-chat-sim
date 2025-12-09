@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       range: "Sheet1!A1",
       values: [[
         data.sessionId,
-        data.attemptIndex ?? 1,
+        data.step,
         data.mbti,
         data.scene,
         data.userChoice,
