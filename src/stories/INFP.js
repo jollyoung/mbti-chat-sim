@@ -13,8 +13,8 @@ const INFP = {
           tone: "Neutral",
           intent: "Self-disclosure",
           silent: true,
-          actionText: (nickname) =>
-            "안녕하세요! 혜정씨 통해 소개받은 ${nickname}입니다."
+          actionText: (nickname = "") =>
+            `안녕하세요! 혜정씨 통해 소개받은 ${nickname}입니다.`
         },
         {
           label: "상대가 먼저 연락오길 기다리기",

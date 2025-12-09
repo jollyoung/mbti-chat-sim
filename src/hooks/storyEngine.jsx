@@ -40,6 +40,7 @@ export function useStoryEngine() {
   const [currentLocation, setCurrentLocation] = useState("default");
   const [locationVersion, setLocationVersion] = useState(0);
   const mbtiRef = useRef(null);
+  const nicknameRef = useRef("");
 
   // dY"Э б~,И°?Й?, Н"И°?
   const [affection, setAffection] = useState(0);
@@ -142,9 +143,25 @@ export function useStoryEngine() {
 
     setPendingChoice(null);
 
-    setHistory(prev => [...prev, { role: "user", text: option.label }]);
-
     stepRef.current += 1;
+
+    // history에 넣을 사용자 메시지 결정
+    let userMessage = option.label;
+    if (option.silent) {
+      if (option.actionText) {
+        const nickname =
+          nicknameRef?.current ??
+          userInfoRef.current?.nickname ??
+          "";
+        userMessage = option.actionText(nickname);
+      } else {
+        userMessage = null; // silent + actionText 없으면 아무것도 표시 안 함
+      }
+    }
+    
+    if (userMessage) {
+      setHistory((prev) => [...prev, { role: "user", text: userMessage }]);
+    }
 
     await axios.post("/api/logChoice", {
       sessionId: sessionIdRef.current,
@@ -158,13 +175,6 @@ export function useStoryEngine() {
       sex: userInfoRef.current?.sex,
       age: userInfoRef.current?.age,
     });
-
-    if (!option.silent) {
-      setHistory(prev => [...prev, { role: "user", text: option.label }]);
-    } else if (option.actionText) {
-      const text = option.actionText(nicknameRef.current);
-      setHistory(prev => [...prev, { role: "user", text }]);
-    }
 
 
     if (!option.next) {
@@ -184,7 +194,7 @@ export function useStoryEngine() {
     setPendingChoice(null);
     mbtiRef.current = mbti;
     setCurrentMBTI(mbti);
-    setAffection(0); // Н'^И,°бT" dY"Э
+    nicknameRef.current = userInfo.nickname || "";
 
     userInfoRef.current = userInfo;
 
