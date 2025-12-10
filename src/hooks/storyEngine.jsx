@@ -105,7 +105,7 @@ export function useStoryEngine() {
 
       // 딜레이 후 메시지 추가
       if (isNpc || isPlayer) {
-        const defaultDelay = 600;
+        const defaultDelay = 1500;
         const delay =
           typeof item.delay === "number"
             ? item.delay
