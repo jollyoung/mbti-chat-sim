@@ -105,11 +105,17 @@ export function useStoryEngine() {
 
       // 딜레이 후 메시지 추가
       if (isNpc || isPlayer) {
-        const delay = typeof item.delay === "number" ? item.delay : SPEECH_DELAY_MS;
+        const defaultDelay = 600;
+        const delay =
+          typeof item.delay === "number"
+            ? item.delay
+            : defaultDelay;
+
         await new Promise((resolve) => setTimeout(resolve, delay));
         setHistory((prev) => [...prev, item]);
         continue;
       }
+
 
       // 다음 씬으로 이동
       if (item.next && !item.type && !item.role) {
