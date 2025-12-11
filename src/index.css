@@ -533,6 +533,11 @@
 }
 
 
+
+.chat-wrapper.restaurant-bg .chat-body {
+  background: rgba(0, 0, 0, 0.08); /* restaurant overlay to show bg */
+}
+
 /* ============================
    🔥 위치 전환 애니메이션
 ============================ */
@@ -565,3 +570,5 @@
     transform: translateY(-12px);
   }
 }
+
+
