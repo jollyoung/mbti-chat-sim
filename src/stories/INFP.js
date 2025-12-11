@@ -3,6 +3,24 @@ import { LOCATION } from "../constants/locations";
 
 const INFP = {
 
+  // 00. 프로필 소개 (프롤로그)
+  [SCENE.PROLOGUE]: [
+    {
+      role: "system",
+      text:
+        "✨ 오늘의 매칭 상대 프로필\n\n" +
+        "이름: 서지은\n" +
+        "성향: INFP\n\n" +
+        "차분한 분위기를 선호하며\n" +
+        "대화는 서서히 편해지는 타입입니다.\n\n" +
+        "회사 업무 특성상 퇴근 시간이 일정하지 않을 수 있고,\n" +
+        "퇴근 후에는 가볍고 부담 없는 대화를 편안하게 느끼는 편입니다.\n\n" +
+        "일상 이야기나 취향에 관한 대화를 좋아하며,\n" +
+        "조용한 공간에서의 만남을 선호하는 편입니다."
+    },
+    { next: SCENE.CONTACT_DECISION }
+  ],
+
   // 00. 연락할지 말지
   [SCENE.CONTACT_DECISION]: [
     {

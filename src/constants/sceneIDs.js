@@ -1,6 +1,8 @@
 // constants/sceneIDs.js
 
 export const SCENE = {
+  // 00. 프로필 소개 (프롤로그)
+  PROLOGUE: "PROLOGUE",
   // 00. 연락 여부
   CONTACT_DECISION: "CONTACT_DECISION",
 
