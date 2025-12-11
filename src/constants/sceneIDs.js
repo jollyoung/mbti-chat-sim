@@ -1,18 +1,38 @@
+// constants/sceneIDs.js
+
 export const SCENE = {
-  CONTACT_DECISION: "contact_decision",   // 연락할지 말지 (silent)
+  // 00. 연락 여부
+  CONTACT_DECISION: "CONTACT_DECISION",
 
-  CONTACT_START: "contact_start",         // 첫 연락 주고받기
-  DAY1_INTEREST: "day1_interest",         // 취향 이야기 → 감정 라포 시작
-  DAY1_MEET_INVITE: "day1_meet_invite",   // 주말 만남 제안
-  CONFIRM_MEET: "confirm_meet",           // 약속 확정 (간단 연결)
+  // 01. 첫 메시지
+  CONTACT_START: "CONTACT_START",
 
-  DAY2_CHEER: "day2_cheer",               // 다음날 톤 확인
+  // 02. 약속 조율
+  CONTACT_SCHEDULING: "CONTACT_SCHEDULING",
+  CONTACT_SCHEDULING_WAIT: "CONTACT_SCHEDULING_WAIT",
 
-  FIRST_MEET: "first_meet",               // 첫 만남 (카페)
-  EMOTION_SHARE: "emotion_share",         // 감정 교류 대화
-  VALUE_DEEPEN: "value_deepen",           // 가치관 깊어짐
+  // 03. 저녁 식사 도착
+  DINNER_MEET: "DINNER_MEET",
 
-  NEXT_MEET_SUGGEST: "next_meet_suggest", // 다음 만남 제안 (현재는 BYPASS)
-  ENDING_ONE: "ending_one",               // 단일 엔딩
+  // 04. 저녁 대화 & 분기
+  DINNER_TALK: "DINNER_TALK",
+  DINNER_FLOW: "DINNER_FLOW",
+  DINNER_INFP_MOMENT: "DINNER_INFP_MOMENT",
+
+  // 05. 카페 이동
+  CAFE_MOVE: "CAFE_MOVE",
+
+  // 06. 카페 대화
+  CAFE_TALK: "CAFE_TALK",
+  CAFE_FLOW: "CAFE_FLOW",
+  CAFE_INFP_MOMENT: "CAFE_INFP_MOMENT",
+
+  // 07. 산책 제안
+  WALK_SUGGEST: "WALK_SUGGEST",
+
+  // 08. 산책 대화
+  WALK_TALK: "WALK_TALK",
+
+  // 09. 엔딩
+  ENDING_ONE: "ENDING_ONE",
 };
-export default SCENE;

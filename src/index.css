@@ -501,6 +501,12 @@
   background-position: center;
 }
 
+.chat-wrapper.restaurant-bg {
+  background-image: url("/bg_restaurant.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
 .chat-wrapper.street-bg {
   background-image: url("/bg_cafe.jpg");
   background-size: cover;

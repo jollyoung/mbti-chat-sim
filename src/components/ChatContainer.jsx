@@ -34,6 +34,7 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
   return (
     <div className={`chat-wrapper ${transitionClass} ${
       displayLocation === "cafe" ? "cafe-bg" :
+      displayLocation === "restaurant" ? "restaurant-bg" :
       displayLocation === "street" ? "street-bg" :
       displayLocation === "home" ? "home-bg" : "default-bg"
     }`}>
