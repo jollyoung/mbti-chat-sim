@@ -572,17 +572,53 @@
 }
 
 
+/* System Notice Card */
 .system-notice-card {
-  max-width: 90%;
-  margin: 24px auto;
-  padding: 16px;
-  background: #f7f7f7;
+  max-width: 320px;
+  margin: 28px auto;
+  padding: 18px 16px;
+
+  background: #fafafa;
   border-radius: 12px;
+
   text-align: center;
-  font-size: 14px;
-  line-height: 1.5;
   white-space: pre-line;
 }
+
+/* Header (예: 오늘의 매칭 상대 프로필) */
+.system-notice-card .notice-header {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+/* Meta (이름 · MBTI) */
+.system-notice-card .notice-meta {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 14px;
+}
+
+/* Body text */
+.system-notice-card .notice-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #444;
+}
+
+/* Paragraph spacing inside body */
+.system-notice-card .notice-body p {
+  margin: 0 0 10px 0;
+}
+
+.system-notice-card .notice-body p:last-child {
+  margin-bottom: 0;
+}
+
 
 .system-divider {
   margin: 20px auto;

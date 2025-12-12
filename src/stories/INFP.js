@@ -8,6 +8,7 @@ const INFP = {
     {
       role: "system",
       systemType: "notice",
+      delay: 1500,
       text:
         "✨ 오늘의 매칭 상대 프로필\n\n" +
         "이름: 서지은\n" +
