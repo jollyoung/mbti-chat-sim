@@ -34,7 +34,7 @@ const CHOICE_DELAY_MS = 600;
 
 export function useStoryEngine() {
   const [currentScenario, setCurrentScenario] = useState(null);
-  const [currentScene, setCurrentScene] = useState(SCENE.CONTACT_DECISION);
+  const [currentScene, setCurrentScene] = useState(SCENE.PROLOGUE);
   const [history, setHistory] = useState([]);
   const [pendingChoice, setPendingChoice] = useState(null);
   const [currentMBTI, setCurrentMBTI] = useState(null);
@@ -200,7 +200,7 @@ export function useStoryEngine() {
 
 
   const start = async (mbti, userInfo) => {
-    setCurrentScene(SCENE.CONTACT_DECISION);
+    setCurrentScene(SCENE.PROLOGUE);
     setHistory([]);
     setPendingChoice(null);
     mbtiRef.current = mbti;
@@ -217,7 +217,7 @@ export function useStoryEngine() {
     setLocationVersion((v) => v + 1); // 위치 버전 증가
 
     abortRef.current = false;
-    runScene(scenario, SCENE.CONTACT_DECISION);
+    runScene(scenario, SCENE.PROLOGUE);
   };
 
 
@@ -253,7 +253,7 @@ export function useStoryEngine() {
     abortRef.current = true;
     setHistory([]);
     setCurrentScenario(null);
-    setCurrentScene(SCENE.CONTACT_DECISION);
+    setCurrentScene(SCENE.PROLOGUE);
     setPendingChoice(null);
     setCurrentMBTI(null);
     setCurrentLocation(LOCATION.DEFAULT);
