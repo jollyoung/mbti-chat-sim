@@ -49,6 +49,7 @@ export function useStoryEngine() {
   const sessionIdRef = useRef(createSessionId());
   const stepRef = useRef(0);
   const abortRef = useRef(false);
+  const scenarioRef = useRef(null);
 
   const storyTable = {
     INFP,
@@ -121,7 +122,7 @@ export function useStoryEngine() {
       if (item.next && !item.type && !item.role) {
         if (!abortRef.current && sessionIdRef.current) {
           setCurrentScene(item.next);
-          runScene(currentScenario, item.next);
+          runScene(scenario, item.next);
         }
         return;
       }
@@ -194,7 +195,7 @@ export function useStoryEngine() {
     }
 
     setCurrentScene(option.next);
-    runScene(currentScenario, option.next);
+    runScene(scenarioRef.current, option.next);
   };
 
 
@@ -212,6 +213,7 @@ export function useStoryEngine() {
     setIsEnding(false);
 
     const scenario = storyTable[mbti];
+    scenarioRef.current = scenario;
     setCurrentScenario(scenario);
     setCurrentLocation(LOCATION.DEFAULT);
     setLocationVersion((v) => v + 1); // 위치 버전 증가
