@@ -574,6 +574,7 @@
 
 /* System Notice Card */
 .system-notice-card {
+  font-family: "SUIT", -apple-system, BlinkMacSystemFont, sans-serif;
   max-width: 320px;
   margin: 28px auto;
   padding: 18px 16px;
