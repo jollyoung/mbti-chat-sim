@@ -21,6 +21,7 @@ import ESFJ from "../stories/ESFJ";
 import ESTP from "../stories/ESTP";
 import ESTJ from "../stories/ESTJ";
 
+
 // 세션 ID 생성
 const createSessionId = () => {
   const prefix = "session-";
@@ -103,17 +104,21 @@ export function useStoryEngine() {
 
       const isNpc = item.role === "npc";
       const isPlayer = item.role === "player";
+      const isSystem = item.role === "system";
 
-      // 딜레이 후 메시지 추가
-      if (isNpc || isPlayer) {
+      if (isNpc || isPlayer || isSystem) {
         const defaultDelay = 1100;
-        const delay =
-          typeof item.delay === "number"
-            ? item.delay
-            : defaultDelay;
-
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        setHistory((prev) => [...prev, item]);
+        const delay = typeof item.delay === "number" ? item.delay : defaultDelay;
+        await new Promise((r) => setTimeout(r, delay));
+        setHistory((prev) => [
+          ...prev,
+          {
+            role: item.role,
+            text: item.text,
+            systemType: item.systemType || null,
+            location: item.location || null,
+          },
+        ]);
         continue;
       }
 

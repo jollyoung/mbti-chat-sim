@@ -1,5 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import ChatBubble from "./ChatBubble.jsx";
+import SystemNoticeCard from "./SystemNoticeCard";
+import SystemDivider from "./SystemDivider";
+import SystemStatus from "./SystemStatus";
+
+function renderMessage(msg, npcProfile) {
+  if (msg.role === "system") {
+    switch (msg.systemType) {
+      case "notice":
+        return <SystemNoticeCard text={msg.text} />;
+      case "divider":
+        return <SystemDivider text={msg.text} />;
+      case "status":
+        return <SystemStatus text={msg.text} />;
+      default:
+        return null; // 알 수 없는 타입이면 스킵
+    }
+  }
+
+  return (
+    <ChatBubble
+      role={msg.role}
+      text={msg.text}
+      npcProfile={npcProfile}
+    />
+  );
+}
+
 
 export default function ChatContainer({ messages, npcProfile, currentLocation }) {
   const bottomRef = useRef(null);
@@ -48,12 +75,7 @@ export default function ChatContainer({ messages, npcProfile, currentLocation })
 
       <div className="chat-body">
         {messages.map((msg, i) => (
-          <ChatBubble
-            key={i}
-            role={msg.role}
-            text={msg.text}
-            npcProfile={npcProfile}
-          />
+          <div key={i}>{renderMessage(msg, npcProfile)}</div>
         ))}
         <div ref={bottomRef} />
       </div>

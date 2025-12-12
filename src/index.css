@@ -572,3 +572,30 @@
 }
 
 
+.system-notice-card {
+  max-width: 90%;
+  margin: 24px auto;
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.system-divider {
+  margin: 20px auto;
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+}
+
+.system-status {
+  margin: 12px auto;
+  text-align: center;
+  font-size: 12px;
+  color: #777;
+}
+
+
