@@ -6,7 +6,7 @@ const INFP = {
   // 00. 프로필 소개 (프롤로그)
   [SCENE.PROLOGUE]: [
     {
-      role: "system",
+      role: "player",
       text:
         "✨ 오늘의 매칭 상대 프로필\n\n" +
         "이름: 서지은\n" +
