@@ -576,56 +576,61 @@
 .system-notice-card {
   font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
 
-  max-width: 320px;
-  margin: 28px auto;
-  padding: 20px 18px;
+  box-sizing: border-box;
+  width: min(92%, 360px);
+  margin: 18px auto;
+  padding: 18px 16px;
 
-  background: #fafafa;
-  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
 
-  text-align: center;
-  white-space: pre-line;
+  /* ✅ 튀어나옴 방지 핵심 */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
 
+  color: #2f2f2f;
   font-size: 14px;
-  font-weight: 450;
-  line-height: 1.65;
+  line-height: 1.7;
   letter-spacing: -0.01em;
-  color: #333;
 }
 
-/* Header (예: 오늘의 매칭 상대 프로필) */
+/* Header */
 .system-notice-card .notice-header {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: #888;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #7b7b7b;
   margin-bottom: 10px;
 }
 
 /* Meta (이름 · MBTI) */
 .system-notice-card .notice-meta {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 14px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2a2a2a;
+  margin-bottom: 12px;
 }
 
 /* Body text */
 .system-notice-card .notice-body {
+  text-align: left;          /* ✅ 채팅 앱 톤 */
   font-size: 14px;
   font-weight: 400;
-  line-height: 1.7;
-  color: #444;
+  color: #3f3f3f;
+  line-height: 1.75;
 }
 
-/* Paragraph spacing inside body */
 .system-notice-card .notice-body p {
   margin: 0 0 10px 0;
 }
-
 .system-notice-card .notice-body p:last-child {
   margin-bottom: 0;
 }
+
 
 
 .system-divider {
