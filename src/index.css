@@ -574,16 +574,23 @@
 
 /* System Notice Card */
 .system-notice-card {
-  font-family: "SUIT", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+
   max-width: 320px;
   margin: 28px auto;
-  padding: 18px 16px;
+  padding: 20px 18px;
 
   background: #fafafa;
-  border-radius: 12px;
+  border-radius: 14px;
 
   text-align: center;
   white-space: pre-line;
+
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  color: #333;
 }
 
 /* Header (예: 오늘의 매칭 상대 프로필) */
